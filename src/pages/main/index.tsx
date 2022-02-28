@@ -1,10 +1,12 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
-import { Chat } from "../chat/Chat";
-import { Sidebar } from "../sidebar/Sidebar";
+import { Chat } from "../../components/chat/Chat";
+import { Sidebar } from "../../components/sidebar/Sidebar";
 import { MESSAGE_TYPE } from "../../constants/index";
 import { getKnownChannels, getKnownUsers } from "../../helpers/index";
 import { usePolling } from "../../hooks/usePolling";
+import { SplitPane } from "../../components/splitPane/index";
+import "./Main.css";
 
 import { KnownUserType, KnownChannelType } from "../../types";
 
@@ -14,7 +16,7 @@ type Selected = {
 };
 
 export function Main() {
-  const user = useContext(UserContext);
+  const [user] = useContext(UserContext);
   const [users, setUsers] = useState<KnownUserType[]>([]);
   const [channels, setChannels] = useState<KnownChannelType[]>([]);
   const [selected, setSelected] = useState<Selected>({
@@ -32,7 +34,7 @@ export function Main() {
       const users = await getKnownUsers(user.id);
       setUsers(users);
 
-      const channels = await getKnownChannels();
+      const channels = await getKnownChannels(user.id);
       setChannels(channels);
     },
     [],
@@ -45,19 +47,32 @@ export function Main() {
 
   return (
     <div className="main">
-      <Sidebar
-        users={users}
-        channels={channels}
-        selected={selected}
-        changeSelected={changeSelected}
-      />
-      {selectedItem && (
-        <Chat
-          chatType={selected.type}
-          id={selectedItem.id}
-          name={selectedItem.name}
+      <header className="main__header">
+        <input className="header__input" value={""} placeholder="Search" />
+      </header>
+      <div className="main__body">
+        <SplitPane
+          splitDirection="horizontal"
+          minSize="300px"
+          pane1={
+            <Sidebar
+              users={users}
+              channels={channels}
+              selected={selected}
+              changeSelected={changeSelected}
+            />
+          }
+          pane2={
+            selectedItem && (
+              <Chat
+                chatType={selected.type}
+                id={selectedItem.id}
+                name={selectedItem.name}
+              />
+            )
+          }
         />
-      )}
+      </div>
     </div>
   );
 }

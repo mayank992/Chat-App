@@ -1,30 +1,26 @@
-import { useState, useContext } from "react";
+import React, { useEffect, useRef } from "react";
 import { Message } from "./Message";
 import { MessageType } from "../../types";
-import { MESSAGE_TYPE } from "../../constants";
-import { usePolling } from "../../hooks/usePolling";
-import { UserContext } from "../../contexts/UserContext";
-import { getMessages } from "../../helpers/index";
 
 type Props = {
-  chatType: MESSAGE_TYPE;
-  id: string;
+  messages: MessageType[];
 };
 
-export function ChatFeed({ chatType, id }: Props) {
-  const user = useContext(UserContext);
-  const [messages, setMessages] = useState<MessageType[]>([]);
+export function ChatFeed({ messages }: Props) {
+  const chatFeedRef = useRef<HTMLDivElement>(null);
 
-  async function refreshMessages() {
-    const messages = await getMessages(user.id, chatType, id);
-
-    setMessages(messages);
+  function scrollToBottom() {
+    if (chatFeedRef.current) {
+      chatFeedRef.current.scrollTop = chatFeedRef.current.scrollHeight;
+    }
   }
 
-  usePolling(refreshMessages, [chatType, id], 5000);
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
-    <div className="chat__feed">
+    <div className="chat__feed" ref={chatFeedRef}>
       {messages.map((message) => {
         return <Message key={message.id} message={message} />;
       })}

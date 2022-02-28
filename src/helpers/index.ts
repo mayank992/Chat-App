@@ -24,8 +24,6 @@ export async function getKnownUsers(userId: string) {
     headers: { userid: userId },
   });
 
-  console.log(res.data);
-
   return res.data.map((user: any) => ({ ...user, unreadCount: 0 }));
 }
 
@@ -34,9 +32,12 @@ export async function getChannels() {
   return channels;
 }
 
-export async function getKnownChannels() {
-  await delay(1000);
-  return knownChannels;
+export async function getKnownChannels(userId: string) {
+  const res = await axios.get("/channels/joined", {
+    headers: { userid: userId },
+  });
+
+  return res.data.map((user: any) => ({ ...user, unreadCount: 0 }));
 }
 
 export async function getMessages(
@@ -52,9 +53,20 @@ export async function getMessages(
   return res.data;
 }
 
-export async function getMembers(channelId: string) {
-  await delay(1000);
-  return knownUsers;
+export async function getChannelMembers(channelId: string) {
+  const res = await axios.get(`/channels/${channelId}/members`);
+
+  return res.data;
+}
+
+export async function getChannelNonMembers(channelId: string) {
+  const res = await axios.get(`/channels/${channelId}/nonmembers`);
+
+  return res.data;
+}
+
+export async function addUserToChannel(channelId: string, userId: string) {
+  await axios.post(`/channels/${channelId}/members`, { userId });
 }
 
 export async function sendMessageAPI(message: {

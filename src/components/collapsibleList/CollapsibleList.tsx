@@ -3,11 +3,17 @@ import "./styles.css";
 
 type Props = {
   title: string;
-  onClickAdd?: React.MouseEventHandler<HTMLDivElement>;
+  renderOnClickAdd?: React.ReactNode;
   children: React.ReactNode;
+  addDisabled?: boolean;
 };
 
-export function CollapsibleList({ title, onClickAdd, children }: Props) {
+export function CollapsibleList({
+  title,
+  renderOnClickAdd,
+  children,
+  addDisabled,
+}: Props) {
   const { open, toggle } = useToggle(true);
 
   return (
@@ -15,9 +21,11 @@ export function CollapsibleList({ title, onClickAdd, children }: Props) {
       <dt className="list__title" onClick={() => toggle()}>
         <div className={"arrow" + (open ? " arrow--down" : "")}></div>
         {title}
-        <div className="list__add-item" onClick={onClickAdd}>
-          +
-        </div>
+        {!addDisabled && (
+          <>
+            <div className="list__add-item">+</div>
+          </>
+        )}
       </dt>
       {open && children}
     </dl>

@@ -13,5 +13,5 @@ export function usePolling(cb: () => Promise<void>, deps: any[], ms: number) {
     return () => {
       clearTimeout(timerId);
     };
-  }, []);
+  }, deps);
 }

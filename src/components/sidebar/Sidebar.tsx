@@ -8,8 +8,8 @@ import {
   CollapsibleList,
 } from "../collapsibleList/index";
 import { KnownChannelType, KnownUserType } from "../../types";
-import userIcon from "../../user.png";
-import channelIcon from "../../hashtag.png";
+import userIcon from "../../assets/user.png";
+import channelIcon from "../../assets/hashtag.png";
 import { MESSAGE_TYPE } from "../../constants";
 
 type Selected = { type: MESSAGE_TYPE; id: string | null };
@@ -22,7 +22,7 @@ type Props = {
 };
 
 export function Sidebar({ users, channels, selected, changeSelected }: Props) {
-  const user = useContext(UserContext);
+  const [user] = useContext(UserContext);
 
   return (
     <div className="sidebar">

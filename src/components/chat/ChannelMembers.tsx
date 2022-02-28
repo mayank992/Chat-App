@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { useToggle } from "../../hooks/useToggle";
 import { Modal } from "../Modal";
-import { getMembers } from "../../helpers/index";
+import {
+  getChannelMembers,
+  getChannelNonMembers,
+  addUserToChannel,
+} from "../../helpers/index";
 import { KnownUserType } from "../../types";
 import { ListItem, ListItemIcon, ListItemText } from "../collapsibleList/index";
-import addUserIcon from "../../add-user.png";
-import userIcon from "../../user.png";
+import { CollapsibleList } from "../collapsibleList/index";
+import userIcon from "../../assets/user.png";
 
 type Props = {
   channelId: string;
@@ -14,16 +18,30 @@ type Props = {
 export function ChannelMembers({ channelId }: Props) {
   const { open, toggle } = useToggle(false);
   const [members, setMembers] = useState<KnownUserType[]>([]);
+  const [nonMembers, setNonMembers] = useState<KnownUserType[]>([]);
+
+  function refreshData() {
+    getChannelMembers(channelId).then((data: KnownUserType[]) =>
+      setMembers(data)
+    );
+    getChannelNonMembers(channelId).then((data: KnownUserType[]) =>
+      setNonMembers(data)
+    );
+  }
 
   useEffect(() => {
-    getMembers(channelId).then((data) => setMembers(data));
-  }, []);
+    refreshData();
+  }, [channelId]);
+
+  function addUser(userId: string) {
+    addUserToChannel(channelId, userId).then(() => refreshData());
+  }
 
   return (
     <>
       <span className="chat__members" onClick={toggle}>
         <img className="chat-members__icon" src={userIcon} />
-        <p className="chat__members-count">{8}</p>
+        <p className="chat__members-count">{members.length}</p>
       </span>
       {open && (
         <Modal>
@@ -33,15 +51,7 @@ export function ChannelMembers({ channelId }: Props) {
                 <h3>Members</h3>
                 <button onClick={toggle}>X</button>
               </header>
-              <dl className="chat__members-modal-body">
-                <ListItem
-                  selected={false}
-                  onClick={() => {}}
-                  style={{ padding: "5px 20px", height: "60px" }}
-                >
-                  <ListItemIcon src={addUserIcon} />
-                  <ListItemText text="Add People" />
-                </ListItem>
+              <CollapsibleList title="In this channel" addDisabled={true}>
                 {members.map((member) => {
                   return (
                     <ListItem
@@ -55,7 +65,28 @@ export function ChannelMembers({ channelId }: Props) {
                     </ListItem>
                   );
                 })}
-              </dl>
+              </CollapsibleList>
+              <CollapsibleList title="Not in this channel" addDisabled={true}>
+                {nonMembers.map((member) => {
+                  return (
+                    <ListItem
+                      key={member.id}
+                      selected={false}
+                      onClick={() => {}}
+                      style={{ padding: "5px 20px", height: "60px" }}
+                    >
+                      <ListItemIcon src={userIcon} />
+                      <ListItemText text={member.name} />
+                      <button
+                        className="channel-members__add-btn"
+                        onClick={() => addUser(member.id)}
+                      >
+                        Add
+                      </button>
+                    </ListItem>
+                  );
+                })}
+              </CollapsibleList>
             </div>
           </div>
         </Modal>
@@ -63,3 +94,5 @@ export function ChannelMembers({ channelId }: Props) {
     </>
   );
 }
+
+//  className="chat__members-modal-body"
