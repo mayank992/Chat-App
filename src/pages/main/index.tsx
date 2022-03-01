@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { Chat } from "../../components/chat/Chat";
 import { Sidebar } from "../../components/sidebar/Sidebar";
-import { MESSAGE_TYPE } from "../../constants/index";
+import { CHAT_TYPE } from "../../constants/index";
 import { getJoinedChannels, getConnections } from "../../helpers/index";
 import { ConnectionType, JoinedChannelType } from "../../types";
 import { SplitPane } from "../../components/SplitPane";
@@ -10,7 +10,7 @@ import { useQuery } from "../../hooks/useQuery";
 import "./Main.css";
 
 type Selected = {
-  type: MESSAGE_TYPE;
+  type: CHAT_TYPE;
   id: string | null;
 };
 
@@ -25,12 +25,12 @@ export function Main() {
     { refetchInterval: 5000 }
   );
   const [selected, setSelected] = useState<Selected>({
-    type: MESSAGE_TYPE.DM,
+    type: CHAT_TYPE.DM,
     id: null,
   });
 
   const selectedItem =
-    selected.type === MESSAGE_TYPE.DM
+    selected.type === CHAT_TYPE.DM
       ? users?.find((user) => user.id === selected.id)
       : channels?.find((channel) => channel.id === selected.id);
 

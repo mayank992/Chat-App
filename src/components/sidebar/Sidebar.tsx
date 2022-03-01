@@ -10,9 +10,9 @@ import {
 import { JoinedChannelType, ConnectionType } from "../../types";
 import userIcon from "../../assets/user.png";
 import channelIcon from "../../assets/hashtag.png";
-import { MESSAGE_TYPE } from "../../constants";
+import { CHAT_TYPE } from "../../constants";
 
-type Selected = { type: MESSAGE_TYPE; id: string | null };
+type Selected = { type: CHAT_TYPE; id: string | null };
 
 type Props = {
   users: ConnectionType[];
@@ -34,13 +34,13 @@ export function Sidebar({ users, channels, selected, changeSelected }: Props) {
           <ListItem
             key={channel.id}
             selected={
-              selected.type === MESSAGE_TYPE.CHANNEL
+              selected.type === CHAT_TYPE.CHANNEL
                 ? channel.id === selected.id
                 : false
             }
             onClick={(e) => {
               e.stopPropagation();
-              changeSelected({ type: MESSAGE_TYPE.CHANNEL, id: channel.id });
+              changeSelected({ type: CHAT_TYPE.CHANNEL, id: channel.id });
             }}
           >
             <ListItemIcon src={channelIcon} />
@@ -53,13 +53,11 @@ export function Sidebar({ users, channels, selected, changeSelected }: Props) {
           <ListItem
             key={user.id}
             selected={
-              selected.type === MESSAGE_TYPE.DM
-                ? user.id === selected.id
-                : false
+              selected.type === CHAT_TYPE.DM ? user.id === selected.id : false
             }
             onClick={(e) => {
               e.stopPropagation();
-              changeSelected({ type: MESSAGE_TYPE.DM, id: user.id });
+              changeSelected({ type: CHAT_TYPE.DM, id: user.id });
             }}
           >
             <ListItemIcon src={userIcon} />

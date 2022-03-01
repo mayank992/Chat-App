@@ -1,4 +1,4 @@
-export enum MESSAGE_TYPE {
+export enum CHAT_TYPE {
   CHANNEL,
   DM,
 }

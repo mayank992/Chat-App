@@ -29,20 +29,20 @@ export function useQuery<T>(
   useEffect(() => {
     let timerId: number;
 
-    (function poll() {
-      setStatus(QueryStatus.loading);
-      fn()
-        .then((data) => {
-          setData(data);
-          setStatus(QueryStatus.success);
-        })
-        .catch((error) => {
-          setError(error);
-          setStatus(QueryStatus.error);
-        });
+    (async function poll() {
+      try {
+        setStatus(QueryStatus.loading);
+        const data = await fn();
 
-      if (refetchInterval != null) {
-        timerId = window.setTimeout(poll, refetchInterval);
+        setData(data);
+        setStatus(QueryStatus.success);
+
+        if (refetchInterval != null) {
+          timerId = window.setTimeout(poll, refetchInterval);
+        }
+      } catch (error: any) {
+        setError(error);
+        setStatus(QueryStatus.error);
       }
     })();
 

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { ChatFeed } from "./ChatFeed";
 import userLogo from "../../assets/user.png";
-import { MESSAGE_TYPE } from "../../constants/index";
+import { CHAT_TYPE } from "../../constants/index";
 import { getMessages, sendMessageAPI } from "../../helpers/index";
 import { ChannelMembers } from "./ChannelMembers";
 import { UserContext } from "../../contexts/UserContext";
@@ -9,7 +9,7 @@ import { MessageType } from "../../types";
 import { usePolling } from "../../hooks/usePolling";
 
 type Props = {
-  chatType: MESSAGE_TYPE;
+  chatType: CHAT_TYPE;
   id: string;
   name: string;
 };
@@ -49,7 +49,7 @@ export function Chat({ chatType, id, name }: Props) {
       <header className="chat__header">
         <img className="chat__icon" src={userLogo} alt="user-img" />
         <p>{name}</p>
-        {chatType === MESSAGE_TYPE.CHANNEL && <ChannelMembers channelId={id} />}
+        {chatType === CHAT_TYPE.CHANNEL && <ChannelMembers channelId={id} />}
       </header>
       <ChatFeed messages={messages} />
       <footer className="chat__footer">
