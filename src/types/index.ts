@@ -1,4 +1,4 @@
-import { MESSAGE_TYPE } from "./constants/index";
+import { MESSAGE_TYPE } from "../constants/index";
 
 export type MessageType = {
   id: string;
@@ -15,10 +15,9 @@ export type ChannelType = {
   name: string;
 };
 
-export type KnownChannelType = {
+export type JoinedChannelType = {
   id: string;
   name: string;
-  unreadCount: number;
 };
 
 export type UserType = {
@@ -27,9 +26,9 @@ export type UserType = {
   username: string;
 };
 
-export type KnownUserType = {
+export type ConnectionType = {
   id: string;
   name: string;
   username: string;
-  unreadCount: number;
+  unreadCount?: number;
 };

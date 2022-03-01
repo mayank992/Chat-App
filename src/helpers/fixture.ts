@@ -1,11 +1,5 @@
 import { MESSAGE_TYPE } from "../constants/index";
-import {
-  UserType,
-  KnownUserType,
-  ChannelType,
-  KnownChannelType,
-  MessageType,
-} from "../types";
+import { UserType, ChannelType, MessageType } from "../types";
 
 export const users: UserType[] = [
   {
@@ -30,81 +24,6 @@ export const users: UserType[] = [
   },
 ];
 
-export const knownUsers: KnownUserType[] = [
-  {
-    id: "2",
-    name: "Rishi Goel",
-    username: "rishi992",
-    unreadCount: 0,
-  },
-  {
-    id: "4",
-    name: "Mridul",
-    username: "mridul992",
-    unreadCount: 10,
-  },
-  {
-    id: "5",
-    name: "Enan",
-    username: "rishi992",
-    unreadCount: 0,
-  },
-  {
-    id: "6",
-    name: "Caloman",
-    username: "mridul992",
-    unreadCount: 2,
-  },
-  {
-    id: "7",
-    name: "Cassemir",
-    username: "rishi992",
-    unreadCount: 0,
-  },
-  {
-    id: "8",
-    name: "Lukius",
-    username: "mridul992",
-    unreadCount: 0,
-  },
-  {
-    id: "9",
-    name: "Cyrla",
-    username: "rishi992",
-    unreadCount: 0,
-  },
-  {
-    id: "10",
-    name: "Railan",
-    username: "mridul992",
-    unreadCount: 0,
-  },
-  {
-    id: "11",
-    name: "Cassemir",
-    username: "rishi992",
-    unreadCount: 0,
-  },
-  {
-    id: "12",
-    name: "Lukius",
-    username: "mridul992",
-    unreadCount: 0,
-  },
-  {
-    id: "13",
-    name: "Cyrla",
-    username: "rishi992",
-    unreadCount: 0,
-  },
-  {
-    id: "14",
-    name: "Railan",
-    username: "mridul992",
-    unreadCount: 0,
-  },
-];
-
 export const channels: ChannelType[] = [
   {
     id: "10",
@@ -121,19 +40,6 @@ export const channels: ChannelType[] = [
   {
     id: "40",
     name: "frontend-project",
-  },
-];
-
-export const knownChannels: KnownChannelType[] = [
-  {
-    id: "30",
-    name: "security",
-    unreadCount: 2,
-  },
-  {
-    id: "40",
-    name: "frontend-project",
-    unreadCount: 1,
   },
 ];
 

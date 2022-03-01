@@ -7,7 +7,7 @@ import {
   ListItemBadge,
   CollapsibleList,
 } from "../collapsibleList/index";
-import { KnownChannelType, KnownUserType } from "../../types";
+import { JoinedChannelType, ConnectionType } from "../../types";
 import userIcon from "../../assets/user.png";
 import channelIcon from "../../assets/hashtag.png";
 import { MESSAGE_TYPE } from "../../constants";
@@ -15,8 +15,8 @@ import { MESSAGE_TYPE } from "../../constants";
 type Selected = { type: MESSAGE_TYPE; id: string | null };
 
 type Props = {
-  users: KnownUserType[];
-  channels: KnownChannelType[];
+  users: ConnectionType[];
+  channels: JoinedChannelType[];
   selected: Selected;
   changeSelected: (toSelect: Selected) => void;
 };
@@ -45,9 +45,6 @@ export function Sidebar({ users, channels, selected, changeSelected }: Props) {
           >
             <ListItemIcon src={channelIcon} />
             <ListItemText text={channel.name} />
-            {channel.unreadCount > 0 && (
-              <ListItemBadge text={channel.unreadCount.toString()} />
-            )}
           </ListItem>
         ))}
       </CollapsibleList>
@@ -67,9 +64,6 @@ export function Sidebar({ users, channels, selected, changeSelected }: Props) {
           >
             <ListItemIcon src={userIcon} />
             <ListItemText text={user.name} />
-            {user.unreadCount > 0 && (
-              <ListItemBadge text={user.unreadCount.toString()} />
-            )}
           </ListItem>
         ))}
       </CollapsibleList>

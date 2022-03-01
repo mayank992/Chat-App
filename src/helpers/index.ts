@@ -1,11 +1,6 @@
 import axios from "axios";
-import {
-  knownUsers,
-  users,
-  knownChannels,
-  channels,
-  messages,
-} from "./fixture";
+import { client } from "../utils/apiClient";
+import { users, channels } from "./fixture";
 import { MESSAGE_TYPE } from "../constants/index";
 
 async function delay(ms: number) {
@@ -19,12 +14,10 @@ export async function getUsers() {
   return users;
 }
 
-export async function getKnownUsers(userId: string) {
-  const res = await axios.get("/users/known", {
+export async function getConnections(userId: string) {
+  return client("/users/connections", {
     headers: { userid: userId },
   });
-
-  return res.data.map((user: any) => ({ ...user, unreadCount: 0 }));
 }
 
 export async function getChannels() {
@@ -32,7 +25,7 @@ export async function getChannels() {
   return channels;
 }
 
-export async function getKnownChannels(userId: string) {
+export async function getJoinedChannels(userId: string) {
   const res = await axios.get("/channels/joined", {
     headers: { userid: userId },
   });
@@ -46,7 +39,9 @@ export async function getMessages(
   id: string
 ) {
   const url =
-    type === MESSAGE_TYPE.DM ? `/users/${id}/dms` : `/channels/${id}/messages`;
+    type === MESSAGE_TYPE.DM
+      ? `/users/${id}/messages`
+      : `/channels/${id}/messages`;
 
   const res = await axios.get(url, { headers: { userid: userId } });
 
@@ -79,7 +74,7 @@ export async function sendMessageAPI(message: {
 }) {
   let url =
     message.type === MESSAGE_TYPE.DM
-      ? `/users/${message.toId}/dms`
+      ? `/users/${message.toId}/messages`
       : `/channels/${message.toId}/messages`;
 
   const res = await axios.post(

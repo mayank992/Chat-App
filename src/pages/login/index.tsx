@@ -11,9 +11,9 @@ type FormState = {
 };
 
 const initialFormState = {
-  username: "",
-  firstname: "",
-  lastname: "",
+  username: "mayank992",
+  firstname: "Mayank",
+  lastname: "Jindal",
 };
 
 type LoginProps = {
@@ -21,7 +21,7 @@ type LoginProps = {
 };
 
 export function Login({ onLogin }: LoginProps) {
-  const [user, setUser] = useContext(UserContext);
+  const [, setUser] = useContext(UserContext);
   const [formState, setFormState] = useState<FormState>(initialFormState);
 
   async function submitHandler(e: React.FormEvent<HTMLFormElement>) {

@@ -1,5 +1,4 @@
 import { useState, useCallback } from "react";
-import { UserType } from "./types";
 import { Main } from "./pages/main/index";
 import { Login } from "./pages/login/index";
 import { UserProvider } from "./contexts/UserContext";

@@ -3,12 +3,11 @@ import { UserContext } from "../../contexts/UserContext";
 import { Chat } from "../../components/chat/Chat";
 import { Sidebar } from "../../components/sidebar/Sidebar";
 import { MESSAGE_TYPE } from "../../constants/index";
-import { getKnownChannels, getKnownUsers } from "../../helpers/index";
-import { usePolling } from "../../hooks/usePolling";
-import { SplitPane } from "../../components/splitPane/index";
+import { getJoinedChannels, getConnections } from "../../helpers/index";
+import { ConnectionType, JoinedChannelType } from "../../types";
+import { SplitPane } from "../../components/SplitPane";
+import { useQuery } from "../../hooks/useQuery";
 import "./Main.css";
-
-import { KnownUserType, KnownChannelType } from "../../types";
 
 type Selected = {
   type: MESSAGE_TYPE;
@@ -17,29 +16,23 @@ type Selected = {
 
 export function Main() {
   const [user] = useContext(UserContext);
-  const [users, setUsers] = useState<KnownUserType[]>([]);
-  const [channels, setChannels] = useState<KnownChannelType[]>([]);
+  const { data: users } = useQuery<ConnectionType[]>(
+    () => getConnections(user.id),
+    { refetchInterval: 5000 }
+  );
+  const { data: channels } = useQuery<JoinedChannelType[]>(
+    () => getJoinedChannels(user.id),
+    { refetchInterval: 5000 }
+  );
   const [selected, setSelected] = useState<Selected>({
     type: MESSAGE_TYPE.DM,
     id: null,
   });
+
   const selectedItem =
     selected.type === MESSAGE_TYPE.DM
-      ? users.find((user) => user.id === selected.id)
-      : channels.find((channel) => channel.id === selected.id);
-
-  usePolling(
-    async () => {
-      // apply pooling to refresh the data
-      const users = await getKnownUsers(user.id);
-      setUsers(users);
-
-      const channels = await getKnownChannels(user.id);
-      setChannels(channels);
-    },
-    [],
-    5000
-  );
+      ? users?.find((user) => user.id === selected.id)
+      : channels?.find((channel) => channel.id === selected.id);
 
   function changeSelected(toSelect: Selected) {
     setSelected(toSelect);
@@ -48,21 +41,23 @@ export function Main() {
   return (
     <div className="main">
       <header className="main__header">
-        <input className="header__input" value={""} placeholder="Search" />
+        <input className="header__input" placeholder="Search" />
       </header>
       <div className="main__body">
         <SplitPane
-          splitDirection="horizontal"
-          minSize="300px"
-          pane1={
-            <Sidebar
-              users={users}
-              channels={channels}
-              selected={selected}
-              changeSelected={changeSelected}
-            />
+          minWidth="300px"
+          leftPane={
+            users &&
+            channels && (
+              <Sidebar
+                users={users}
+                channels={channels}
+                selected={selected}
+                changeSelected={changeSelected}
+              />
+            )
           }
-          pane2={
+          rightPane={
             selectedItem && (
               <Chat
                 chatType={selected.type}

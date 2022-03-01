@@ -6,7 +6,7 @@ import {
   getChannelNonMembers,
   addUserToChannel,
 } from "../../helpers/index";
-import { KnownUserType } from "../../types";
+import { ConnectionType } from "../../types";
 import { ListItem, ListItemIcon, ListItemText } from "../collapsibleList/index";
 import { CollapsibleList } from "../collapsibleList/index";
 import userIcon from "../../assets/user.png";
@@ -17,14 +17,14 @@ type Props = {
 
 export function ChannelMembers({ channelId }: Props) {
   const { open, toggle } = useToggle(false);
-  const [members, setMembers] = useState<KnownUserType[]>([]);
-  const [nonMembers, setNonMembers] = useState<KnownUserType[]>([]);
+  const [members, setMembers] = useState<ConnectionType[]>([]);
+  const [nonMembers, setNonMembers] = useState<ConnectionType[]>([]);
 
   function refreshData() {
-    getChannelMembers(channelId).then((data: KnownUserType[]) =>
+    getChannelMembers(channelId).then((data: ConnectionType[]) =>
       setMembers(data)
     );
-    getChannelNonMembers(channelId).then((data: KnownUserType[]) =>
+    getChannelNonMembers(channelId).then((data: ConnectionType[]) =>
       setNonMembers(data)
     );
   }
