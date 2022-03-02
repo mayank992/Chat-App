@@ -8,7 +8,7 @@ type CollapsibleHeaderProps = {
   isOpen?: boolean;
   toggle?: () => void;
   style?: { [property: string]: string };
-  render: (isOpen?: boolean, toggle?: () => void) => React.ReactNode;
+  render: (isOpen: boolean, toggle?: () => void) => React.ReactNode;
 };
 
 function CollapsibleHeader({

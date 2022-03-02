@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useCallback } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { Chat } from "../../components/chat/Chat";
 import { Sidebar } from "../../components/sidebar/Sidebar";
@@ -34,9 +34,9 @@ export function Main() {
       ? users?.find((user) => user.id === selected.id)
       : channels?.find((channel) => channel.id === selected.id);
 
-  function changeSelected(toSelect: Selected) {
+  const changeSelected = useCallback((toSelect: Selected) => {
     setSelected(toSelect);
-  }
+  }, []);
 
   return (
     <div className="main">
