@@ -11,9 +11,9 @@ type FormState = {
 };
 
 const initialFormState = {
-  username: "",
-  firstname: "",
-  lastname: "",
+  username: "mayank992",
+  firstname: "Mayank",
+  lastname: "Jindal",
 };
 
 type LoginProps = {
