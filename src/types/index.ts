@@ -1,8 +1,8 @@
-import { MESSAGE_TYPE } from "../constants/index";
+import { CHAT_TYPE } from "../constants/index";
 
 export type MessageType = {
   id: string;
-  type: MESSAGE_TYPE;
+  type: CHAT_TYPE;
   from: UserType;
   to: UserType | ChannelType;
   text: string;
@@ -32,3 +32,5 @@ export type ConnectionType = {
   username: string;
   unreadCount?: number;
 };
+
+export type Selected = { type: CHAT_TYPE; id: string | null };

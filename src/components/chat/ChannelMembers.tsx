@@ -7,8 +7,8 @@ import {
   addUserToChannel,
 } from "../../helpers/index";
 import { ConnectionType } from "../../types";
-import { ListItem, ListItemIcon, ListItemText } from "../collapsibleList/index";
-import { CollapsibleList } from "../collapsibleList/index";
+import { List } from "../common/list/index";
+import { Collapsible } from "../common/collapsible";
 import userIcon from "../../assets/user.png";
 
 type Props = {
@@ -16,7 +16,7 @@ type Props = {
 };
 
 export function ChannelMembers({ channelId }: Props) {
-  const { open, toggle } = useToggle(false);
+  const { isOpen, toggle } = useToggle(false);
   const [members, setMembers] = useState<ConnectionType[]>([]);
   const [nonMembers, setNonMembers] = useState<ConnectionType[]>([]);
 
@@ -43,7 +43,7 @@ export function ChannelMembers({ channelId }: Props) {
         <img className="chat-members__icon" src={userIcon} />
         <p className="chat__members-count">{members.length}</p>
       </span>
-      {open && (
+      {isOpen && (
         <Modal>
           <div className="modal-container">
             <div className="chat__members-modal">
@@ -51,42 +51,84 @@ export function ChannelMembers({ channelId }: Props) {
                 <h3>Members</h3>
                 <button onClick={toggle}>X</button>
               </header>
-              <CollapsibleList title="In this channel" addDisabled={true}>
-                {members.map((member) => {
-                  return (
-                    <ListItem
-                      key={member.id}
-                      selected={false}
-                      onClick={() => {}}
-                      style={{ padding: "5px 20px", height: "60px" }}
-                    >
-                      <ListItemIcon src={userIcon} />
-                      <ListItemText text={member.name} />
-                    </ListItem>
-                  );
-                })}
-              </CollapsibleList>
-              <CollapsibleList title="Not in this channel" addDisabled={true}>
-                {nonMembers.map((member) => {
-                  return (
-                    <ListItem
-                      key={member.id}
-                      selected={false}
-                      onClick={() => {}}
-                      style={{ padding: "5px 20px", height: "60px" }}
-                    >
-                      <ListItemIcon src={userIcon} />
-                      <ListItemText text={member.name} />
-                      <button
-                        className="channel-members__add-btn"
-                        onClick={() => addUser(member.id)}
+              <Collapsible defaultIsOpen={true}>
+                <Collapsible.Header
+                  render={(isOpen) => {
+                    return (
+                      <List.Item>
+                        <List.ItemIcon>
+                          <div
+                            className={"arrow" + (isOpen ? " arrow--down" : "")}
+                          ></div>
+                        </List.ItemIcon>
+                        <p className="list-item__text">In this channel</p>
+                      </List.Item>
+                    );
+                  }}
+                />
+                <Collapsible.Content>
+                  <List>
+                    {members.map((member) => (
+                      <List.Item
+                        key={member.id}
+                        style={{ "padding-left": "20px" }}
                       >
-                        Add
-                      </button>
-                    </ListItem>
-                  );
-                })}
-              </CollapsibleList>
+                        <List.ItemIcon>
+                          <img
+                            src={userIcon}
+                            alt="user-icon"
+                            style={{ maxHeight: "100%" }}
+                          />
+                        </List.ItemIcon>
+                        <p className="list-item__text">{member.name}</p>
+                      </List.Item>
+                    ))}
+                  </List>
+                </Collapsible.Content>
+              </Collapsible>
+              <Collapsible defaultIsOpen={true}>
+                <Collapsible.Header
+                  render={(isOpen) => {
+                    return (
+                      <List.Item>
+                        <List.ItemIcon>
+                          <div
+                            className={"arrow" + (isOpen ? " arrow--down" : "")}
+                          ></div>
+                        </List.ItemIcon>
+                        <p className="list-item__text">Not in this channel</p>
+                      </List.Item>
+                    );
+                  }}
+                />
+                <Collapsible.Content>
+                  <List>
+                    {nonMembers.map((nonMember) => (
+                      <List.Item
+                        key={nonMember.id}
+                        style={{ "padding-left": "20px" }}
+                      >
+                        <List.ItemIcon>
+                          <img
+                            src={userIcon}
+                            alt="user-icon"
+                            style={{ maxHeight: "100%" }}
+                          />
+                        </List.ItemIcon>
+                        <p className="list-item__text">{nonMember.name}</p>
+                        <List.ItemOptions>
+                          <button
+                            className="channel-members__add-btn"
+                            onClick={() => addUser(nonMember.id)}
+                          >
+                            Add
+                          </button>
+                        </List.ItemOptions>
+                      </List.Item>
+                    ))}
+                  </List>
+                </Collapsible.Content>
+              </Collapsible>
             </div>
           </div>
         </Modal>
@@ -94,5 +136,3 @@ export function ChannelMembers({ channelId }: Props) {
     </>
   );
 }
-
-//  className="chat__members-modal-body"

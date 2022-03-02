@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 
 export function useToggle(initialState: boolean): {
-  open: boolean;
+  isOpen: boolean;
   toggle: () => void;
 } {
   const [open, setOpen] = useState<boolean>(initialState);
@@ -10,5 +10,5 @@ export function useToggle(initialState: boolean): {
     setOpen((val) => !val);
   }, []);
 
-  return { open, toggle };
+  return { isOpen: open, toggle };
 }

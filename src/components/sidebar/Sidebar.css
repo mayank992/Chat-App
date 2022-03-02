@@ -1,0 +1,40 @@
+/* TODO - Refactor this CSS file */
+
+.sidebar {
+  color: lightgray;
+}
+
+.list__add-item {
+  text-align: center;
+  width: 25px;
+  height: 25px;
+  font-size: 18px;
+  margin: 0;
+  margin-left: auto;
+  border-radius: 5px;
+}
+
+.list__add-item:hover {
+  background-color: #6e6d74;
+  cursor: pointer;
+}
+
+.list__list-item:hover {
+  background-color: #2b2a2f;
+}
+
+.list__list-item--active,
+.list__list-item--active:hover {
+  background-color: #2c649e;
+}
+
+.list-item__text {
+  font-size: 16px;
+  flex: 1;
+}
+
+.list-item__badge {
+  padding: 2px 5px;
+  background-color: #980f0f;
+  border-radius: 10px;
+}

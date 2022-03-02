@@ -1,4 +1,4 @@
-import { MESSAGE_TYPE } from "../constants/index";
+import { CHAT_TYPE } from "../constants/index";
 import { UserType, ChannelType, MessageType } from "../types";
 
 export const users: UserType[] = [
@@ -46,7 +46,7 @@ export const channels: ChannelType[] = [
 export const messages: MessageType[] = [
   {
     id: "1",
-    type: MESSAGE_TYPE.CHANNEL,
+    type: CHAT_TYPE.CHANNEL,
     from: {
       id: "1",
       name: "Mayank Jindal",
@@ -63,7 +63,7 @@ export const messages: MessageType[] = [
   },
   {
     id: "2",
-    type: MESSAGE_TYPE.DM,
+    type: CHAT_TYPE.DM,
     from: {
       id: "2",
       name: "Rishi Goel",
@@ -80,7 +80,7 @@ export const messages: MessageType[] = [
   },
   {
     id: "3",
-    type: MESSAGE_TYPE.CHANNEL,
+    type: CHAT_TYPE.CHANNEL,
     from: {
       id: "2",
       name: "Rishi Goel",
@@ -97,7 +97,7 @@ export const messages: MessageType[] = [
   },
   {
     id: "4",
-    type: MESSAGE_TYPE.CHANNEL,
+    type: CHAT_TYPE.CHANNEL,
     from: {
       id: "1",
       name: "Mayank Jindal",
@@ -114,7 +114,7 @@ export const messages: MessageType[] = [
   },
   {
     id: "5",
-    type: MESSAGE_TYPE.DM,
+    type: CHAT_TYPE.DM,
     from: {
       id: "2",
       name: "Rishi Goel",
@@ -131,7 +131,7 @@ export const messages: MessageType[] = [
   },
   {
     id: "6",
-    type: MESSAGE_TYPE.CHANNEL,
+    type: CHAT_TYPE.CHANNEL,
     from: {
       id: "2",
       name: "Rishi Goel",
@@ -148,7 +148,7 @@ export const messages: MessageType[] = [
   },
   {
     id: "7",
-    type: MESSAGE_TYPE.CHANNEL,
+    type: CHAT_TYPE.CHANNEL,
     from: {
       id: "1",
       name: "Mayank Jindal",
@@ -165,7 +165,7 @@ export const messages: MessageType[] = [
   },
   {
     id: "8",
-    type: MESSAGE_TYPE.DM,
+    type: CHAT_TYPE.DM,
     from: {
       id: "2",
       name: "Rishi Goel",
@@ -182,7 +182,7 @@ export const messages: MessageType[] = [
   },
   {
     id: "9",
-    type: MESSAGE_TYPE.CHANNEL,
+    type: CHAT_TYPE.CHANNEL,
     from: {
       id: "2",
       name: "Rishi Goel",

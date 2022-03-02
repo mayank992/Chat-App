@@ -1,7 +1,7 @@
 import axios from "axios";
 import { client } from "../utils/apiClient";
 import { users, channels } from "./fixture";
-import { MESSAGE_TYPE } from "../constants/index";
+import { CHAT_TYPE } from "../constants/index";
 
 async function delay(ms: number) {
   await new Promise((resolve, reject) => {
@@ -26,20 +26,14 @@ export async function getChannels() {
 }
 
 export async function getJoinedChannels(userId: string) {
-  const res = await axios.get("/channels/joined", {
+  return client("/channels/joined", {
     headers: { userid: userId },
   });
-
-  return res.data.map((user: any) => ({ ...user, unreadCount: 0 }));
 }
 
-export async function getMessages(
-  userId: string,
-  type: MESSAGE_TYPE,
-  id: string
-) {
+export async function getMessages(userId: string, type: CHAT_TYPE, id: string) {
   const url =
-    type === MESSAGE_TYPE.DM
+    type === CHAT_TYPE.DM
       ? `/users/${id}/messages`
       : `/channels/${id}/messages`;
 
@@ -65,7 +59,7 @@ export async function addUserToChannel(channelId: string, userId: string) {
 }
 
 export async function sendMessageAPI(message: {
-  type: MESSAGE_TYPE;
+  type: CHAT_TYPE;
   from: string;
   fromId: string;
   to: string;
@@ -73,7 +67,7 @@ export async function sendMessageAPI(message: {
   text: string;
 }) {
   let url =
-    message.type === MESSAGE_TYPE.DM
+    message.type === CHAT_TYPE.DM
       ? `/users/${message.toId}/messages`
       : `/channels/${message.toId}/messages`;
 
