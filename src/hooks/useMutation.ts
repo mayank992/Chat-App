@@ -48,7 +48,7 @@ export function useMutation<TReq, TRes>(
       .catch((error) => {
         const errorData = error.response
           ? error.response.data
-          : { message: messages.INTERNAL_SERVER_ERROR };
+          : { message: messages.NETWORK_ERROR };
 
         setState((prevState) => {
           return {

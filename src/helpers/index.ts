@@ -80,7 +80,7 @@ export async function addUserToChannel(channelId: string, userId: string) {
   await axios.post(`/channels/${channelId}/members`, { userId });
 }
 
-export async function sendMessageAPI(message: {
+export async function sendMessage(message: {
   type: CHAT_TYPE;
   from: string;
   fromId: string;
@@ -108,7 +108,7 @@ export async function sendMessageAPI(message: {
   return;
 }
 
-export async function loginAPI(body: {
+export async function login(body: {
   username: string;
   firstname: string;
   lastname: string;

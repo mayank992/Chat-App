@@ -1,9 +1,10 @@
 import React, { useState, useContext } from "react";
 import { UserType } from "../../types";
-import { loginAPI } from "../../helpers/index";
+import { login } from "../../helpers/index";
 import { UserContext } from "../../contexts/UserContext";
 import { useMutation } from "../../hooks/useMutation";
 import { Error } from "../../components/Error";
+import { Spinner } from "../../components/common/spinner";
 import "./Login.css";
 
 type FormState = {
@@ -22,14 +23,10 @@ export function Login() {
   const [, setUser] = useContext(UserContext);
   const [formState, setFormState] = useState<FormState>(initialFormState);
 
-  const { isError, error, mutate } = useMutation<any, UserType>(
-    async (formData) => {
-      return await loginAPI(formData);
-    },
+  const { isError, error, mutate, isLoading } = useMutation<any, UserType>(
+    login,
     {
-      onSuccess: (user) => {
-        setUser(user);
-      },
+      onSuccess: setUser,
     }
   );
 
@@ -78,7 +75,10 @@ export function Login() {
           />
         </label>
         {isError && <Error message={error.message}></Error>}
-        <button type="submit">Login</button>
+        <button type="submit" className="submit-btn">
+          Login
+          {isLoading && <Spinner />}
+        </button>
       </form>
     </div>
   );

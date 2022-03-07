@@ -60,7 +60,7 @@ export function useQuery<T>(
       .catch((error) => {
         const errorData = error.response
           ? error.response.data
-          : { message: messages.INTERNAL_SERVER_ERROR };
+          : { message: messages.NETWORK_ERROR };
 
         setState((prevState) => ({
           ...prevState,
@@ -86,7 +86,6 @@ export function useQuery<T>(
         [abortController, promise] = fetchData();
 
         promise.catch((error) => {
-          console.log(error.message);
           clearInterval(timerId);
         });
       }, refetchInterval);

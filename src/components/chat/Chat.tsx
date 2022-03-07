@@ -2,9 +2,12 @@ import React, { useState, useContext, useRef } from "react";
 import { ChatFeed } from "./ChatFeed";
 import userLogo from "../../assets/user.png";
 import { CHAT_TYPE } from "../../constants/index";
-import { sendMessageAPI } from "../../helpers/index";
+import { sendMessage } from "../../helpers/index";
 import { ChannelMembers } from "./ChannelMembers";
 import { UserContext } from "../../contexts/UserContext";
+import { Spinner } from "../common/spinner/index";
+import { useMutation } from "../../hooks/useMutation";
+import "./Chat.css";
 
 type Props = {
   chatType: CHAT_TYPE;
@@ -16,12 +19,15 @@ export const Chat = React.memo(({ chatType, id, name }: Props) => {
   const [user] = useContext(UserContext);
   const [message, setMessage] = useState<string>("");
   const chatFeedRef = useRef<{ refreshFeed: () => {} }>(null);
+  const { mutate: mutateMessage, isLoading: isMutatingMessage } = useMutation<
+    any,
+    any
+  >(sendMessage);
 
   async function handleMessageSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    // use useMutation api
-    await sendMessageAPI({
+    await mutateMessage({
       type: chatType,
       from: user.name,
       to: name,
@@ -29,9 +35,6 @@ export const Chat = React.memo(({ chatType, id, name }: Props) => {
       toId: id,
       text: message,
     });
-
-    // TODO - abort this request if selected tab changes
-    chatFeedRef.current?.refreshFeed();
 
     setMessage("");
   }
@@ -58,6 +61,7 @@ export const Chat = React.memo(({ chatType, id, name }: Props) => {
             disabled={message === ""}
           >
             Send
+            {isMutatingMessage && <Spinner />}
           </button>
         </form>
       </footer>

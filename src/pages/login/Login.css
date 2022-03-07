@@ -51,7 +51,7 @@
   outline: 1px solid gray;
 }
 
-.login__form button {
+.submit-btn {
   margin-top: 30px;
   width: 60%;
   height: 50px;
@@ -60,9 +60,17 @@
   font-size: 16px;
   background-color: #127fe6;
   color: lightgrey;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 
-.login__form button:hover {
+.submit-btn .spinner--small {
+  border-top: 4px solid #127fe6;
+}
+
+.submit-btn:hover {
   background-color: #356acd;
   cursor: pointer;
 }
