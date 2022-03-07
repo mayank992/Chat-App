@@ -1,11 +1,9 @@
 import { useContext, useCallback } from "react";
 import { UserContext } from "../../contexts/UserContext";
-import { JoinedChannelType, ConnectionType } from "../../types";
+import { JoinedChannelType, ConnectionType, Selected } from "../../types";
 import { CHAT_TYPE } from "../../constants";
 import { Menu } from "./Menu";
 import "./Sidebar.css";
-
-type Selected = { type: CHAT_TYPE; id: string | null };
 
 type Props = {
   users: ConnectionType[];
@@ -31,15 +29,15 @@ export function Sidebar({ users, channels, selected, changeSelected }: Props) {
         <h2>{user.username}</h2>
       </header>
       <Menu
-        title="Direct messages"
+        title="Channels"
         items={channels}
-        selectedId={selected.id || ""}
+        selectedId={selected.id}
         onChangeSelected={handleChannelSelect}
       />
       <Menu
-        title="Channels"
+        title="Direct Messages"
         items={users}
-        selectedId={selected.id || ""}
+        selectedId={selected.id}
         onChangeSelected={handleConnectionSelect}
       />
     </div>

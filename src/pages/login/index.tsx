@@ -2,6 +2,8 @@ import React, { useState, useContext } from "react";
 import { UserType } from "../../types";
 import { loginAPI } from "../../helpers/index";
 import { UserContext } from "../../contexts/UserContext";
+import { useMutation } from "../../hooks/useMutation";
+import { Error } from "../../components/Error";
 import "./Login.css";
 
 type FormState = {
@@ -11,31 +13,29 @@ type FormState = {
 };
 
 const initialFormState = {
-  username: "mayank992",
-  firstname: "Mayank",
-  lastname: "Jindal",
+  username: "",
+  firstname: "",
+  lastname: "",
 };
 
-type LoginProps = {
-  onLogin: any;
-};
-
-export function Login({ onLogin }: LoginProps) {
+export function Login() {
   const [, setUser] = useContext(UserContext);
   const [formState, setFormState] = useState<FormState>(initialFormState);
 
+  const { isError, error, mutate } = useMutation<any, UserType>(
+    async (formData) => {
+      return await loginAPI(formData);
+    },
+    {
+      onSuccess: (user) => {
+        setUser(user);
+      },
+    }
+  );
+
   async function submitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
-    // handle errors
-    const userDetails: UserType = await loginAPI(formState);
-
-    // set user details in the context so that the whole app
-    // can access the user details easily.
-    setUser(userDetails);
-
-    // if successful
-    onLogin();
+    mutate(formState);
   }
 
   function changeHandler(e: React.ChangeEvent<HTMLInputElement>) {
@@ -77,6 +77,7 @@ export function Login({ onLogin }: LoginProps) {
             onChange={changeHandler}
           />
         </label>
+        {isError && <Error message={error.message}></Error>}
         <button type="submit">Login</button>
       </form>
     </div>

@@ -14,9 +14,13 @@ export async function getUsers() {
   return users;
 }
 
-export async function getConnections(userId: string) {
+export async function getConnections(
+  userId: string,
+  options: { [property: string]: any }
+) {
   return client("/users/connections", {
     headers: { userid: userId },
+    ...options,
   });
 }
 
@@ -25,31 +29,49 @@ export async function getChannels() {
   return channels;
 }
 
-export async function getJoinedChannels(userId: string) {
+export async function getJoinedChannels(
+  userId: string,
+  options: { [property: string]: any }
+) {
   return client("/channels/joined", {
     headers: { userid: userId },
+    ...options,
   });
 }
 
-export async function getMessages(userId: string, type: CHAT_TYPE, id: string) {
+export async function getMessages(
+  userId: string,
+  type: CHAT_TYPE,
+  id: string,
+  options: { [property: string]: any }
+) {
   const url =
     type === CHAT_TYPE.DM
       ? `/users/${id}/messages`
       : `/channels/${id}/messages`;
 
-  const res = await axios.get(url, { headers: { userid: userId } });
+  return client(url, {
+    headers: { userid: userId },
+    ...options,
+  });
+}
+
+export async function getChannelMembers(
+  channelId: string,
+  options: { [property: string]: any }
+) {
+  const res = await axios.get(`/channels/${channelId}/members`, { ...options });
 
   return res.data;
 }
 
-export async function getChannelMembers(channelId: string) {
-  const res = await axios.get(`/channels/${channelId}/members`);
-
-  return res.data;
-}
-
-export async function getChannelNonMembers(channelId: string) {
-  const res = await axios.get(`/channels/${channelId}/nonmembers`);
+export async function getChannelNonMembers(
+  channelId: string,
+  options: { [property: string]: any }
+) {
+  const res = await axios.get(`/channels/${channelId}/nonmembers`, {
+    ...options,
+  });
 
   return res.data;
 }
@@ -86,20 +108,12 @@ export async function sendMessageAPI(message: {
   return;
 }
 
-export async function loginAPI({
-  username,
-  firstname,
-  lastname,
-}: {
+export async function loginAPI(body: {
   username: string;
   firstname: string;
   lastname: string;
 }) {
-  const res = await axios.post("/login", {
-    username,
-    firstname,
-    lastname,
-  });
+  const res = await axios.post("/login", body);
 
   return res.data;
 }

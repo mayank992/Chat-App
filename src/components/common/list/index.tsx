@@ -30,7 +30,7 @@ type ListItemProps = {
   [property: string]: any;
 };
 
-export function ListItem({
+function ListItem({
   isActive = false,
   children,
   style: customStyle = {},

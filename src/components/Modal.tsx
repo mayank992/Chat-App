@@ -11,10 +11,12 @@ export function Modal({ children }: Props) {
   const el = useRef<HTMLDivElement>(document.createElement("div"));
 
   useEffect(() => {
-    modalElem?.appendChild(el.current);
+    const element = el.current;
+
+    modalElem?.appendChild(element);
 
     return () => {
-      modalElem?.removeChild(el.current);
+      modalElem?.removeChild(element);
     };
   }, []);
 

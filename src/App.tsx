@@ -1,21 +1,26 @@
-import { useState, useCallback } from "react";
-import { Main } from "./pages/main/index";
+import React, { useState } from "react";
 import { Login } from "./pages/login/index";
-import { UserProvider } from "./contexts/UserContext";
+import { UserContext } from "./contexts/UserContext";
+import { UserType } from "./types/index";
+import { FullPageSpinner } from "./components/common/spinner";
 import "./App.css";
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+const Main = React.lazy(() => import("./pages/main/index"));
 
-  const handleLogin = useCallback(() => {
-    setIsLoggedIn(true);
-  }, []);
+function App() {
+  const [user, setUser] = useState<UserType | null>(null);
 
   return (
     <div className="App">
-      <UserProvider>
-        {isLoggedIn ? <Main /> : <Login onLogin={handleLogin} />}
-      </UserProvider>
+      <UserContext.Provider value={[user, setUser]}>
+        {user ? (
+          <React.Suspense fallback={<FullPageSpinner size="medium" />}>
+            <Main />
+          </React.Suspense>
+        ) : (
+          <Login />
+        )}
+      </UserContext.Provider>
     </div>
   );
 }

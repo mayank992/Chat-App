@@ -1,10 +1,11 @@
 import { useState, useContext, useCallback } from "react";
-import { UserContext } from "../../contexts/UserContext";
+import { useUser } from "../../contexts/UserContext";
 import { Chat } from "../../components/chat/Chat";
 import { Sidebar } from "../../components/sidebar/Sidebar";
 import { CHAT_TYPE } from "../../constants/index";
 import { getJoinedChannels, getConnections } from "../../helpers/index";
 import { ConnectionType, JoinedChannelType } from "../../types";
+import { SearchBar } from "../../components/SearchBar";
 import { SplitPane } from "../../components/SplitPane";
 import { useQuery } from "../../hooks/useQuery";
 import "./Main.css";
@@ -14,14 +15,16 @@ type Selected = {
   id: string | null;
 };
 
-export function Main() {
-  const [user] = useContext(UserContext);
+export default function Main() {
+  const [user] = useUser();
   const { data: users } = useQuery<ConnectionType[]>(
-    () => getConnections(user.id),
+    [user.id],
+    ({ signal }) => getConnections(user.id, { signal }),
     { refetchInterval: 5000 }
   );
   const { data: channels } = useQuery<JoinedChannelType[]>(
-    () => getJoinedChannels(user.id),
+    [user.id],
+    ({ signal }) => getJoinedChannels(user.id, { signal }),
     { refetchInterval: 5000 }
   );
   const [selected, setSelected] = useState<Selected>({
@@ -41,21 +44,18 @@ export function Main() {
   return (
     <div className="main">
       <header className="main__header">
-        <input className="header__input" placeholder="Search" />
+        <SearchBar />
       </header>
       <div className="main__body">
         <SplitPane
           minWidth="300px"
           leftPane={
-            users &&
-            channels && (
-              <Sidebar
-                users={users}
-                channels={channels}
-                selected={selected}
-                changeSelected={changeSelected}
-              />
-            )
+            <Sidebar
+              users={users || []}
+              channels={channels || []}
+              selected={selected}
+              changeSelected={changeSelected}
+            />
           }
           rightPane={
             selectedItem && (

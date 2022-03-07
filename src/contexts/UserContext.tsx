@@ -1,29 +1,10 @@
-import React, { useState, createContext } from "react";
+import { useContext, createContext } from "react";
 import { UserType } from "../types";
 
-type UserProviderProps = {
-  children: React.ReactNode;
-};
+export const UserContext = createContext<[any, any]>([null, () => {}]);
 
-const defaultUser = {
-  id: "",
-  name: "",
-  username: "",
-};
+export function useUser(): [any, any] {
+  const value = useContext(UserContext);
 
-export const UserContext = createContext<[UserType, any]>([
-  defaultUser,
-  () => {},
-]);
-
-export const UserProvider = ({
-  children,
-}: UserProviderProps): React.ReactElement => {
-  const [user, setUser] = useState<UserType>(defaultUser);
-
-  return (
-    <UserContext.Provider value={[user, setUser]}>
-      {children}
-    </UserContext.Provider>
-  );
-};
+  return value;
+}

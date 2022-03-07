@@ -2,7 +2,7 @@ import React from "react";
 import { useToggle } from "../../../hooks/useToggle";
 import "./Collapsible.css";
 
-// Compound component and render props
+// Patterns used: Compound component and render props
 
 type CollapsibleHeaderProps = {
   isOpen?: boolean;

@@ -1,12 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { ChatFeed } from "./ChatFeed";
 import userLogo from "../../assets/user.png";
 import { CHAT_TYPE } from "../../constants/index";
-import { getMessages, sendMessageAPI } from "../../helpers/index";
+import { sendMessageAPI } from "../../helpers/index";
 import { ChannelMembers } from "./ChannelMembers";
 import { UserContext } from "../../contexts/UserContext";
-import { MessageType } from "../../types";
-import { usePolling } from "../../hooks/usePolling";
 
 type Props = {
   chatType: CHAT_TYPE;
@@ -14,22 +12,15 @@ type Props = {
   name: string;
 };
 
-export function Chat({ chatType, id, name }: Props) {
+export const Chat = React.memo(({ chatType, id, name }: Props) => {
   const [user] = useContext(UserContext);
   const [message, setMessage] = useState<string>("");
-  const [messages, setMessages] = useState<MessageType[]>([]);
-
-  async function refreshMessages() {
-    const messages = await getMessages(user.id, chatType, id);
-
-    setMessages(messages);
-  }
-
-  usePolling(refreshMessages, [chatType, id], 5000);
+  const chatFeedRef = useRef<{ refreshFeed: () => {} }>(null);
 
   async function handleMessageSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    // use useMutation api
     await sendMessageAPI({
       type: chatType,
       from: user.name,
@@ -39,7 +30,8 @@ export function Chat({ chatType, id, name }: Props) {
       text: message,
     });
 
-    refreshMessages();
+    // TODO - abort this request if selected tab changes
+    chatFeedRef.current?.refreshFeed();
 
     setMessage("");
   }
@@ -51,7 +43,7 @@ export function Chat({ chatType, id, name }: Props) {
         <p>{name}</p>
         {chatType === CHAT_TYPE.CHANNEL && <ChannelMembers channelId={id} />}
       </header>
-      <ChatFeed messages={messages} />
+      <ChatFeed chatType={chatType} id={id} ref={chatFeedRef} />
       <footer className="chat__footer">
         <form onSubmit={handleMessageSubmit}>
           <input
@@ -71,4 +63,4 @@ export function Chat({ chatType, id, name }: Props) {
       </footer>
     </div>
   );
-}
+});

@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
 import { useToggle } from "../../hooks/useToggle";
+import { Icon, Arrow } from "../common/icons/index";
+import { useQuery } from "../../hooks/useQuery";
 import { Modal } from "../Modal";
 import {
   getChannelMembers,
@@ -17,31 +18,29 @@ type Props = {
 
 export function ChannelMembers({ channelId }: Props) {
   const { isOpen, toggle } = useToggle(false);
-  const [members, setMembers] = useState<ConnectionType[]>([]);
-  const [nonMembers, setNonMembers] = useState<ConnectionType[]>([]);
-
-  function refreshData() {
-    getChannelMembers(channelId).then((data: ConnectionType[]) =>
-      setMembers(data)
-    );
-    getChannelNonMembers(channelId).then((data: ConnectionType[]) =>
-      setNonMembers(data)
-    );
-  }
-
-  useEffect(() => {
-    refreshData();
-  }, [channelId]);
+  const { data: members, refreshData: refreshMembers } = useQuery<
+    ConnectionType[]
+  >([channelId], ({ signal }) => getChannelMembers(channelId, { signal }), {
+    refetchInterval: 5000,
+  });
+  const { data: nonMembers, refreshData: refreshNonMembers } = useQuery<
+    ConnectionType[]
+  >([channelId], ({ signal }) => getChannelNonMembers(channelId, { signal }), {
+    refetchInterval: 5000,
+  });
 
   function addUser(userId: string) {
-    addUserToChannel(channelId, userId).then(() => refreshData());
+    addUserToChannel(channelId, userId).then(() => {
+      refreshMembers();
+      refreshNonMembers();
+    });
   }
 
   return (
     <>
       <span className="chat__members" onClick={toggle}>
-        <img className="chat-members__icon" src={userIcon} />
-        <p className="chat__members-count">{members.length}</p>
+        <img className="chat-members__icon" src={userIcon} alt="user-img" />
+        <p className="chat__members-count">{members?.length}</p>
       </span>
       {isOpen && (
         <Modal>
@@ -49,7 +48,7 @@ export function ChannelMembers({ channelId }: Props) {
             <div className="chat__members-modal">
               <header className="chat__members-modal-hedear">
                 <h3>Members</h3>
-                <button onClick={toggle}>X</button>
+                <Icon onClick={toggle}>X</Icon>
               </header>
               <Collapsible defaultIsOpen={true}>
                 <Collapsible.Header
@@ -57,9 +56,7 @@ export function ChannelMembers({ channelId }: Props) {
                     return (
                       <List.Item>
                         <List.ItemIcon>
-                          <div
-                            className={"arrow" + (isOpen ? " arrow--down" : "")}
-                          ></div>
+                          <Arrow direction={isOpen ? "down" : "right"}></Arrow>
                         </List.ItemIcon>
                         <p className="list-item__text">In this channel</p>
                       </List.Item>
@@ -68,10 +65,10 @@ export function ChannelMembers({ channelId }: Props) {
                 />
                 <Collapsible.Content>
                   <List>
-                    {members.map((member) => (
+                    {members?.map((member) => (
                       <List.Item
                         key={member.id}
-                        style={{ "padding-left": "20px" }}
+                        style={{ paddingLeft: "20px" }}
                       >
                         <List.ItemIcon>
                           <img
@@ -80,7 +77,7 @@ export function ChannelMembers({ channelId }: Props) {
                             style={{ maxHeight: "100%" }}
                           />
                         </List.ItemIcon>
-                        <p className="list-item__text">{member.name}</p>
+                        <List.ItemText>{member.name}</List.ItemText>
                       </List.Item>
                     ))}
                   </List>
@@ -92,9 +89,7 @@ export function ChannelMembers({ channelId }: Props) {
                     return (
                       <List.Item>
                         <List.ItemIcon>
-                          <div
-                            className={"arrow" + (isOpen ? " arrow--down" : "")}
-                          ></div>
+                          <Arrow direction={isOpen ? "down" : "right"}></Arrow>
                         </List.ItemIcon>
                         <p className="list-item__text">Not in this channel</p>
                       </List.Item>
@@ -103,10 +98,10 @@ export function ChannelMembers({ channelId }: Props) {
                 />
                 <Collapsible.Content>
                   <List>
-                    {nonMembers.map((nonMember) => (
+                    {nonMembers?.map((nonMember) => (
                       <List.Item
                         key={nonMember.id}
-                        style={{ "padding-left": "20px" }}
+                        style={{ paddingLeft: "20px" }}
                       >
                         <List.ItemIcon>
                           <img
@@ -115,7 +110,7 @@ export function ChannelMembers({ channelId }: Props) {
                             style={{ maxHeight: "100%" }}
                           />
                         </List.ItemIcon>
-                        <p className="list-item__text">{nonMember.name}</p>
+                        <List.ItemText>{nonMember.name}</List.ItemText>
                         <List.ItemOptions>
                           <button
                             className="channel-members__add-btn"

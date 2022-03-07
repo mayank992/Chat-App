@@ -1,5 +1,6 @@
 import { List } from "../common/list/index";
 import { Collapsible } from "../common/collapsible/index";
+import { Icon, Arrow } from "../common/icons/index";
 
 // TODO - temporary imports
 import hashIcon from "../../assets/hashtag.png";
@@ -10,11 +11,11 @@ export function MenuHeader({ title, isOpen }: MenuHeaderProps) {
   return (
     <List.Item>
       <List.ItemIcon>
-        <div className={"arrow" + (isOpen ? " arrow--down" : "")}></div>
+        <Arrow direction={isOpen ? "down" : "right"}></Arrow>
       </List.ItemIcon>
       <p className="list-item__text">{title}</p>
       <List.ItemOptions>
-        <div className="list__add-item">+</div>
+        <Icon>+</Icon>
       </List.ItemOptions>
     </List.Item>
   );
@@ -22,7 +23,7 @@ export function MenuHeader({ title, isOpen }: MenuHeaderProps) {
 
 type MenuItemProps = {
   item: any;
-  selectedId: string;
+  selectedId: string | null;
   onChangeSelected: (id: string) => void;
 };
 
@@ -44,21 +45,21 @@ function MenuItem({ item, selectedId, onChangeSelected }: MenuItemProps) {
 type MenuProps = {
   title: string;
   items: any[];
-  selectedId?: string;
+  selectedId: string | null;
   onChangeSelected: (id: string) => void;
 };
 
 export function Menu({
   title,
   items = [],
-  selectedId = "",
+  selectedId,
   onChangeSelected,
 }: MenuProps): React.ReactElement {
   return (
-    <div className="channel-list">
+    <div className="menu">
       <Collapsible defaultIsOpen={true}>
         <Collapsible.Header
-          render={(isOpen) => <MenuHeader title="Channels" isOpen={isOpen} />}
+          render={(isOpen) => <MenuHeader title={title} isOpen={isOpen} />}
         />
         <Collapsible.Content>
           <List>

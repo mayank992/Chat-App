@@ -17,7 +17,7 @@
   background-color: #0e0e10;
 }
 
-.header__input {
+.main__header-search-input {
   padding: 10px;
   color: lightgray;
   font-size: 18px;
@@ -35,5 +35,6 @@
 
 .main__body {
   flex: 1;
+  overflow: hidden;
   width: 100%;
 }
