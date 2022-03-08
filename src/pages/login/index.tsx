@@ -3,7 +3,7 @@ import { UserType } from "../../types";
 import { login } from "../../helpers/index";
 import { UserContext } from "../../contexts/UserContext";
 import { useMutation } from "../../hooks/useMutation";
-import { Error } from "../../components/Error";
+import { ErrorMessage } from "../../components/common/Messages";
 import { Spinner } from "../../components/common/spinner";
 import "./Login.css";
 
@@ -25,9 +25,7 @@ export function Login() {
 
   const { isError, error, mutate, isLoading } = useMutation<any, UserType>(
     login,
-    {
-      onSuccess: setUser,
-    }
+    { onSuccess: setUser }
   );
 
   async function submitHandler(e: React.FormEvent<HTMLFormElement>) {
@@ -74,11 +72,11 @@ export function Login() {
             onChange={changeHandler}
           />
         </label>
-        {isError && <Error message={error.message}></Error>}
         <button type="submit" className="submit-btn">
           Login
           {isLoading && <Spinner />}
         </button>
+        {isError && <ErrorMessage message={error.message} />}
       </form>
     </div>
   );

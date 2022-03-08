@@ -7,7 +7,7 @@ import React, {
 import { FullPageSpinner } from "../common/spinner";
 import { Message } from "./Message";
 import { MessageType } from "../../types";
-import { getMessages } from "../../helpers";
+import { getLatestMessages } from "../../helpers";
 import { useQuery } from "../../hooks/useQuery";
 import { UserContext } from "../../contexts/UserContext";
 import { CHAT_TYPE } from "../../constants";
@@ -25,9 +25,9 @@ export const ChatFeed = React.forwardRef(
       data: messages,
       refreshData,
       isLoading,
-    } = useQuery<MessageType[]>(
+    } = useQuery<{ data: MessageType[] }>(
       [chatType, id],
-      ({ signal }) => getMessages(user.id, chatType, id, { signal }),
+      ({ signal }) => getLatestMessages(user.id, chatType, id, { signal }),
       { refetchInterval: 5000 }
     );
 
@@ -46,7 +46,7 @@ export const ChatFeed = React.forwardRef(
         {isLoading ? (
           <FullPageSpinner size="medium" />
         ) : (
-          messages?.map((message) => {
+          messages?.data.map((message) => {
             return <Message key={message.id} message={message} />;
           })
         )}

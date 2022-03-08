@@ -1,9 +1,8 @@
 import React, { useState, useContext, useRef } from "react";
 import { ChatFeed } from "./ChatFeed";
-import userLogo from "../../assets/user.png";
+import { ChatHeader } from "./ChatHeader";
 import { CHAT_TYPE } from "../../constants/index";
 import { sendMessage } from "../../helpers/index";
-import { ChannelMembers } from "./ChannelMembers";
 import { UserContext } from "../../contexts/UserContext";
 import { Spinner } from "../common/spinner/index";
 import { useMutation } from "../../hooks/useMutation";
@@ -22,18 +21,16 @@ export const Chat = React.memo(({ chatType, id, name }: Props) => {
   const { mutate: mutateMessage, isLoading: isMutatingMessage } = useMutation<
     any,
     any
-  >(sendMessage);
+  >(sendMessage, { onSuccess: chatFeedRef.current?.refreshFeed });
 
   async function handleMessageSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     await mutateMessage({
       type: chatType,
-      from: user.name,
-      to: name,
-      fromId: user.id,
-      toId: id,
-      text: message,
+      from: user.id,
+      to: id,
+      message,
     });
 
     setMessage("");
@@ -41,11 +38,7 @@ export const Chat = React.memo(({ chatType, id, name }: Props) => {
 
   return (
     <div className="chat">
-      <header className="chat__header">
-        <img className="chat__icon" src={userLogo} alt="user-img" />
-        <p>{name}</p>
-        {chatType === CHAT_TYPE.CHANNEL && <ChannelMembers channelId={id} />}
-      </header>
+      <ChatHeader id={id} chatType={chatType} name={name} />
       <ChatFeed chatType={chatType} id={id} ref={chatFeedRef} />
       <footer className="chat__footer">
         <form onSubmit={handleMessageSubmit}>

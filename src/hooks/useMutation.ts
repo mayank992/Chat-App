@@ -46,9 +46,13 @@ export function useMutation<TReq, TRes>(
         options.onSuccess?.(response);
       })
       .catch((error) => {
-        const errorData = error.response
+        let errorData = error.response
           ? error.response.data
           : { message: messages.NETWORK_ERROR };
+
+        if (!errorData.message) {
+          errorData = { message: "Something went wrong" };
+        }
 
         setState((prevState) => {
           return {

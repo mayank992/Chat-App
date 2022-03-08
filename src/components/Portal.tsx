@@ -1,22 +1,22 @@
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 
-const modalElem = document.getElementById("modal");
+const portalElem = document.getElementById("modal");
 
 type Props = {
   children: React.ReactNode;
 };
 
-export function Modal({ children }: Props) {
+export function Portal({ children }: Props) {
   const el = useRef<HTMLDivElement>(document.createElement("div"));
 
   useEffect(() => {
     const element = el.current;
 
-    modalElem?.appendChild(element);
+    portalElem?.appendChild(element);
 
     return () => {
-      modalElem?.removeChild(element);
+      portalElem?.removeChild(element);
     };
   }, []);
 

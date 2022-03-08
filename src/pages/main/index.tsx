@@ -1,12 +1,10 @@
-import { useState, useContext, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useUser } from "../../contexts/UserContext";
-import { Chat } from "../../components/chat/Chat";
-import { Sidebar } from "../../components/sidebar/Sidebar";
+import { Chat } from "../../components/chat/index";
+import { Sidebar } from "../../components/sidebar/index";
 import { CHAT_TYPE } from "../../constants/index";
-import { getJoinedChannels, getConnections } from "../../helpers/index";
-import { ConnectionType, JoinedChannelType } from "../../types";
-import { SearchBar } from "../../components/SearchBar";
-import { SplitPane } from "../../components/SplitPane";
+import { getUserDetails } from "../../helpers/index";
+import { SplitPane } from "../../components/common/SplitPane";
 import { useQuery } from "../../hooks/useQuery";
 import "./Main.css";
 
@@ -17,14 +15,9 @@ type Selected = {
 
 export default function Main() {
   const [user] = useUser();
-  const { data: users } = useQuery<ConnectionType[]>(
+  const { data: userData } = useQuery<any>(
     [user.id],
-    ({ signal }) => getConnections(user.id, { signal }),
-    { refetchInterval: 5000 }
-  );
-  const { data: channels } = useQuery<JoinedChannelType[]>(
-    [user.id],
-    ({ signal }) => getJoinedChannels(user.id, { signal }),
+    ({ signal }) => getUserDetails(user.id, { signal }),
     { refetchInterval: 5000 }
   );
   const [selected, setSelected] = useState<Selected>({
@@ -34,8 +27,10 @@ export default function Main() {
 
   const selectedItem =
     selected.type === CHAT_TYPE.DM
-      ? users?.find((user) => user.id === selected.id)
-      : channels?.find((channel) => channel.id === selected.id);
+      ? userData?.connections.find(
+          (connection: any) => connection.id === selected.id
+        )
+      : userData?.channels.find((channel: any) => channel.id === selected.id);
 
   const changeSelected = useCallback((toSelect: Selected) => {
     setSelected(toSelect);
@@ -43,16 +38,13 @@ export default function Main() {
 
   return (
     <div className="main">
-      <header className="main__header">
-        <SearchBar />
-      </header>
       <div className="main__body">
         <SplitPane
           minWidth="300px"
           leftPane={
             <Sidebar
-              users={users || []}
-              channels={channels || []}
+              users={userData?.connections || []}
+              channels={userData?.channels || []}
               selected={selected}
               changeSelected={changeSelected}
             />

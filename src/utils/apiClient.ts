@@ -29,7 +29,7 @@ export async function client(
     url: endpoint,
     baseURL: BASE_URL,
     method: method || HttpMethods.GET,
-    body: data ? JSON.stringify(data) : undefined,
+    data,
     headers: {
       Authorization: token ? `Bearer ${token}` : "",
       "Content-Type": data ? "application/json" : "",

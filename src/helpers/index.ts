@@ -1,54 +1,43 @@
 import axios from "axios";
 import { client } from "../utils/apiClient";
-import { users, channels } from "./fixture";
 import { CHAT_TYPE } from "../constants/index";
+import { HttpMethods } from "../types/requestTypes";
 
-async function delay(ms: number) {
-  await new Promise((resolve, reject) => {
-    setTimeout(() => resolve(""), ms);
+export function login({
+  username,
+  firstname,
+  lastname,
+}: {
+  username: string;
+  firstname: string;
+  lastname: string;
+}) {
+  return client("/users/login", {
+    method: HttpMethods.POST,
+    data: {
+      username,
+      name: `${firstname} ${lastname}`,
+    },
   });
 }
 
-export async function getUsers() {
-  await delay(1000);
-  return users;
-}
-
-export async function getConnections(
-  userId: string,
-  options: { [property: string]: any }
-) {
-  return client("/users/connections", {
+export function getUserDetails(userId: string, options: any) {
+  return client("/users/alldetails", {
     headers: { userid: userId },
     ...options,
   });
 }
 
-export async function getChannels() {
-  await delay(1000);
-  return channels;
-}
-
-export async function getJoinedChannels(
-  userId: string,
-  options: { [property: string]: any }
-) {
-  return client("/channels/joined", {
-    headers: { userid: userId },
-    ...options,
-  });
-}
-
-export async function getMessages(
+export function getLatestMessages(
   userId: string,
   type: CHAT_TYPE,
   id: string,
-  options: { [property: string]: any }
+  options: any
 ) {
   const url =
     type === CHAT_TYPE.DM
-      ? `/users/${id}/messages`
-      : `/channels/${id}/messages`;
+      ? `/connections/${id}/messages?limit=15`
+      : `/channels/${id}/messages?limit=15`;
 
   return client(url, {
     headers: { userid: userId },
@@ -56,64 +45,69 @@ export async function getMessages(
   });
 }
 
-export async function getChannelMembers(
+export function getChannelMembers(
   channelId: string,
   options: { [property: string]: any }
 ) {
-  const res = await axios.get(`/channels/${channelId}/members`, { ...options });
-
-  return res.data;
+  return client(`/channels/${channelId}/members`, { ...options });
 }
 
-export async function getChannelNonMembers(
+export function addUserToChannel(
+  userId: string,
   channelId: string,
-  options: { [property: string]: any }
+  username: string
 ) {
-  const res = await axios.get(`/channels/${channelId}/nonmembers`, {
-    ...options,
+  return client(`/channels/${channelId}/members`, {
+    data: {
+      username,
+    },
+    method: HttpMethods.POST,
+    headers: {
+      userid: userId,
+    },
   });
-
-  return res.data;
 }
 
-export async function addUserToChannel(channelId: string, userId: string) {
-  await axios.post(`/channels/${channelId}/members`, { userId });
-}
-
-export async function sendMessage(message: {
+export function sendMessage(message: {
   type: CHAT_TYPE;
   from: string;
-  fromId: string;
   to: string;
-  toId: string;
-  text: string;
+  message: string;
 }) {
   let url =
     message.type === CHAT_TYPE.DM
-      ? `/users/${message.toId}/messages`
-      : `/channels/${message.toId}/messages`;
+      ? `/connections/${message.to}/messages`
+      : `/channels/${message.to}/messages`;
 
-  const res = await axios.post(
-    url,
-    {
-      from: message.from,
-      fromId: message.fromId,
-      to: message.to,
-      toId: message.toId,
-      text: message.text,
+  return client(url, {
+    data: {
+      message: message.message,
     },
-    { headers: { userid: message.fromId } }
-  );
-
-  return;
+    method: HttpMethods.POST,
+    headers: { userid: message.from },
+  });
 }
 
-export async function login(body: {
-  username: string;
-  firstname: string;
-  lastname: string;
-}) {
-  const res = await axios.post("/login", body);
+export function createChannel(userId: string, channelName: string) {
+  return client("/channels", {
+    data: {
+      channelName,
+    },
+    method: HttpMethods.POST,
+    headers: {
+      userid: userId,
+    },
+  });
+}
 
-  return res.data;
+export async function addUser(userId: string, username: string) {
+  return client("/connections", {
+    data: {
+      username,
+    },
+    method: HttpMethods.POST,
+    headers: {
+      userid: userId,
+    },
+  });
 }

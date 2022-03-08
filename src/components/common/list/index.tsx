@@ -7,7 +7,7 @@ type ListProps = {
   [property: string]: any;
 };
 
-function List({
+export function List({
   children,
   style: customStyle = {},
   ...restProps
@@ -30,7 +30,7 @@ type ListItemProps = {
   [property: string]: any;
 };
 
-function ListItem({
+export function ListItem({
   isActive = false,
   children,
   style: customStyle = {},
@@ -57,43 +57,3 @@ type ListItemIconProps = {
   children: React.ReactNode;
   style?: { [property: string]: string };
 };
-
-function ListItemIcon({
-  children,
-  style: customStyle = {},
-}: ListItemIconProps): React.ReactElement {
-  const listItemIconStyle = {
-    ...customStyle,
-  };
-
-  return (
-    <div className="list__list-item-icon" style={listItemIconStyle}>
-      {children}
-    </div>
-  );
-}
-
-type ListItemTextProps = {
-  children: React.ReactNode;
-};
-
-function ListItemText({ children }: ListItemTextProps): React.ReactElement {
-  return <div className="list__list-item-text">{children}</div>;
-}
-
-type ListItemOptionsProps = {
-  children: React.ReactNode;
-};
-
-function ListItemOptions({
-  children,
-}: ListItemOptionsProps): React.ReactElement {
-  return <div className="list__list-item-options">{children}</div>;
-}
-
-List.Item = ListItem;
-List.ItemIcon = ListItemIcon;
-List.ItemText = ListItemText;
-List.ItemOptions = ListItemOptions;
-
-export { List };
