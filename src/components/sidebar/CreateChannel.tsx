@@ -1,25 +1,15 @@
 import React, { useState } from "react";
-import { useUser } from "../../contexts/UserContext";
-import { useMutation } from "../../hooks/useMutation";
-import { createChannel } from "../../helpers/index";
 import { ButtonWithSpinner } from "../common/button/index";
 import { ErrorMessage, SuccessMessage } from "../common/Messages";
+import { useCreateChannel } from "./hooks/useCreateChannel";
 
 export function CreateChannel() {
-  const [user] = useUser();
   const [channelName, setChannelName] = useState<string>("");
-  const { isLoading, isError, error, isSuccess, mutate } = useMutation<
-    any,
-    any
-  >((channelName: string) => createChannel(user.id, channelName));
-
-  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setChannelName(e.target.value);
-  }
+  const { isLoading, isError, error, isSuccess, mutate } = useCreateChannel();
 
   function handleCreateChannel(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    mutate(channelName);
+    mutate({ channelName });
   }
 
   return (
@@ -27,7 +17,10 @@ export function CreateChannel() {
       <form className="form" onSubmit={handleCreateChannel}>
         <label>
           Channel name:
-          <input value={channelName} onChange={onChange} />
+          <input
+            value={channelName}
+            onChange={(e) => setChannelName(e.target.value)}
+          />
         </label>
         <ButtonWithSpinner
           className="submit-btn"
@@ -39,7 +32,7 @@ export function CreateChannel() {
         {isSuccess && (
           <SuccessMessage message={"Channel created successfully."} />
         )}
-        {isError && <ErrorMessage message={error.message} />}
+        {isError && <ErrorMessage message={error?.message} />}
       </form>
     </div>
   );

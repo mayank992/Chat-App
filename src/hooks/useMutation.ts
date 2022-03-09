@@ -8,17 +8,19 @@ enum MutationStatus {
   idle = "idle",
 }
 
-export function useMutation<TReq, TRes>(
-  fn: (reqData: TReq) => Promise<TRes>,
-  options: {
-    onSuccess?: (res: TRes) => void;
-    onError?: (error: any) => void;
-  } = {}
+interface MutationOptions<TData, TError> {
+  onSuccess?: (res: TData) => void;
+  onError?: (error: TError) => void;
+}
+
+export function useMutation<TData, TError, TParams>(
+  fn: (reqData: TParams) => Promise<TData>,
+  options: MutationOptions<TData, TError> = {}
 ) {
   const [state, setState] = useState<{
     status: MutationStatus;
-    data: TRes | null;
-    error: any;
+    data: TData | null;
+    error: TError | null;
   }>({
     status: MutationStatus.idle,
     data: null,
@@ -30,7 +32,10 @@ export function useMutation<TReq, TRes>(
   const isSuccess = state.status === MutationStatus.success;
   const isIdle = state.status === MutationStatus.idle;
 
-  function mutate(reqData: TReq): Promise<any> {
+  function mutate(
+    reqData: TParams,
+    mutateOptions: MutationOptions<TData, TError> = {}
+  ): Promise<any> {
     setState((prevState) => ({
       ...prevState,
       status: MutationStatus.loading,
@@ -43,7 +48,9 @@ export function useMutation<TReq, TRes>(
           status: MutationStatus.success,
           error: null,
         });
+
         options.onSuccess?.(response);
+        mutateOptions.onSuccess?.(response);
       })
       .catch((error) => {
         let errorData = error.response
@@ -61,7 +68,9 @@ export function useMutation<TReq, TRes>(
             error: errorData,
           };
         });
+
         options.onError?.(errorData);
+        mutateOptions.onError?.(errorData);
       });
 
     return promise;

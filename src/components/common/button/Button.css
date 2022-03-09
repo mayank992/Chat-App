@@ -20,6 +20,13 @@
   cursor: pointer;
 }
 
-.btn .spinner--small {
-  border-top: 4px solid #347a5c;
+.btn--disabled {
+  background-color: #222529;
+  color: #454545;
+}
+
+.btn--disabled:hover {
+  cursor: auto;
+  background-color: #222529;
+  color: #454545;
 }

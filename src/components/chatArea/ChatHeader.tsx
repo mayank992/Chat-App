@@ -3,7 +3,7 @@ import addUserIcon from "../../assets/add-user.png";
 import { CHAT_TYPE } from "../../constants";
 import { ChannelMembers } from "./ChannelMembers";
 import { Modal, ModalOpenButton, ModalContents } from "../common/modal/index";
-import { AddUser } from "../sidebar/AddUser";
+import { AddUserChannel } from "./AddUserChannel";
 
 type ChatHeaderProps = {
   name: string;
@@ -28,7 +28,7 @@ export function ChatHeader({ name, chatType, id }: ChatHeaderProps) {
               />
             </ModalOpenButton>
             <ModalContents title="Add user">
-              <AddUser id={id} chatType={chatType} />
+              <AddUserChannel channelId={id} />
             </ModalContents>
           </Modal>
         </>

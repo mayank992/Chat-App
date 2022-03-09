@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
-import { useUser } from "../../contexts/UserContext";
-import { Chat } from "../../components/chat/index";
+import { useUserContext } from "../../contexts/UserContext";
+import { ChatArea } from "../../components/chatArea/index";
 import { Sidebar } from "../../components/sidebar/index";
 import { CHAT_TYPE } from "../../constants/index";
 import { getUserDetails } from "../../helpers/index";
@@ -14,26 +14,29 @@ type Selected = {
 };
 
 export default function Main() {
-  const [user] = useUser();
+  const [user] = useUserContext();
   const { data: userData } = useQuery<any>(
     [user.id],
     ({ signal }) => getUserDetails(user.id, { signal }),
     { refetchInterval: 5000 }
   );
-  const [selected, setSelected] = useState<Selected>({
+  // TODO - fix name
+  const [selectedChat, setSelectedChat] = useState<Selected>({
     type: CHAT_TYPE.DM,
     id: null,
   });
 
   const selectedItem =
-    selected.type === CHAT_TYPE.DM
+    selectedChat.type === CHAT_TYPE.DM
       ? userData?.connections.find(
-          (connection: any) => connection.id === selected.id
+          (connection: any) => connection.id === selectedChat.id
         )
-      : userData?.channels.find((channel: any) => channel.id === selected.id);
+      : userData?.channels.find(
+          (channel: any) => channel.id === selectedChat.id
+        );
 
   const changeSelected = useCallback((toSelect: Selected) => {
-    setSelected(toSelect);
+    setSelectedChat(toSelect);
   }, []);
 
   return (
@@ -42,17 +45,19 @@ export default function Main() {
         <SplitPane
           minWidth="300px"
           leftPane={
-            <Sidebar
-              users={userData?.connections || []}
-              channels={userData?.channels || []}
-              selected={selected}
-              changeSelected={changeSelected}
-            />
+            userData && (
+              <Sidebar
+                users={userData.connections}
+                channels={userData.channels}
+                selected={selectedChat}
+                changeSelected={changeSelected}
+              />
+            )
           }
           rightPane={
             selectedItem && (
-              <Chat
-                chatType={selected.type}
+              <ChatArea
+                chatType={selectedChat.type}
                 id={selectedItem.id}
                 name={selectedItem.name}
               />

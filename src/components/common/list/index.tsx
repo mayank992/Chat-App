@@ -52,8 +52,3 @@ export function ListItem({
     </li>
   );
 }
-
-type ListItemIconProps = {
-  children: React.ReactNode;
-  style?: { [property: string]: string };
-};

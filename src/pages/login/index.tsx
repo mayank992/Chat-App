@@ -4,7 +4,7 @@ import { login } from "../../helpers/index";
 import { UserContext } from "../../contexts/UserContext";
 import { useMutation } from "../../hooks/useMutation";
 import { ErrorMessage } from "../../components/common/Messages";
-import { Spinner } from "../../components/common/spinner";
+import { ButtonWithSpinner } from "../../components/common/button";
 import "./Login.css";
 
 type FormState = {
@@ -23,10 +23,11 @@ export function Login() {
   const [, setUser] = useContext(UserContext);
   const [formState, setFormState] = useState<FormState>(initialFormState);
 
-  const { isError, error, mutate, isLoading } = useMutation<any, UserType>(
-    login,
-    { onSuccess: setUser }
-  );
+  const { isError, error, mutate, isLoading } = useMutation<
+    UserType,
+    { message: string },
+    FormState
+  >(login, { onSuccess: setUser });
 
   async function submitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -72,11 +73,15 @@ export function Login() {
             onChange={changeHandler}
           />
         </label>
-        <button type="submit" className="submit-btn">
+        <ButtonWithSpinner
+          className="submit-btn"
+          isLoading={isLoading}
+          disabled={isLoading}
+          type="submit"
+        >
           Login
-          {isLoading && <Spinner />}
-        </button>
-        {isError && <ErrorMessage message={error.message} />}
+        </ButtonWithSpinner>
+        {isError && <ErrorMessage message={error?.message} />}
       </form>
     </div>
   );

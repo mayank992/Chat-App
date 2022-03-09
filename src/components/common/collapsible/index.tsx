@@ -1,25 +1,25 @@
 import React from "react";
 import { useToggle } from "../../../hooks/useToggle";
+import { Arrow } from "../icons";
 import "./Collapsible.css";
-
-// Patterns used: Compound component and render props
 
 type CollapsibleHeaderProps = {
   isOpen?: boolean;
   toggle?: () => void;
   style?: { [property: string]: string };
-  render: (isOpen: boolean, toggle?: () => void) => React.ReactNode;
+  children: React.ReactNode;
 };
 
 function CollapsibleHeader({
   isOpen = false,
   toggle = () => {},
   style: customStyle = {},
-  render,
+  children,
 }: CollapsibleHeaderProps): React.ReactElement {
   return (
     <div className="collapsible__header" onClick={toggle} style={customStyle}>
-      {render(isOpen, toggle)}
+      <Arrow direction={isOpen ? "down" : "right"}></Arrow>
+      {children}
     </div>
   );
 }
@@ -37,11 +37,7 @@ function CollapsibleContent({
   style: customStyle = {},
   children,
 }: CollapsibleContentProps): React.ReactElement {
-  return (
-    <div className="collapsible__content" style={customStyle}>
-      {isOpen && children}
-    </div>
-  );
+  return <div style={customStyle}>{isOpen && children}</div>;
 }
 
 type CollapsibleProps = {
@@ -56,9 +52,8 @@ function Collapsible({
   const { isOpen, toggle } = useToggle(defaultIsOpen);
 
   return (
-    <div className="collapsible">
+    <div>
       {React.Children.map(children, (child) => {
-        // TODO - Validate types of implicit childrens
         return React.cloneElement(child, { isOpen, toggle });
       })}
     </div>

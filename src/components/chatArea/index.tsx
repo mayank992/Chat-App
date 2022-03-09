@@ -1,12 +1,10 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { ChatFeed } from "./ChatFeed";
 import { ChatHeader } from "./ChatHeader";
 import { CHAT_TYPE } from "../../constants/index";
-import { sendMessage } from "../../helpers/index";
-import { UserContext } from "../../contexts/UserContext";
-import { Spinner } from "../common/spinner/index";
-import { useMutation } from "../../hooks/useMutation";
-import "./Chat.css";
+import { ButtonWithSpinner } from "../common/button";
+import { useSendMessage } from "./hooks/useSendMessage";
+import "./ChatArea.css";
 
 type Props = {
   chatType: CHAT_TYPE;
@@ -14,26 +12,27 @@ type Props = {
   name: string;
 };
 
-export const Chat = React.memo(({ chatType, id, name }: Props) => {
-  const [user] = useContext(UserContext);
+export const ChatArea = React.memo(({ chatType, id, name }: Props) => {
   const [message, setMessage] = useState<string>("");
   const chatFeedRef = useRef<{ refreshFeed: () => {} }>(null);
-  const { mutate: mutateMessage, isLoading: isMutatingMessage } = useMutation<
-    any,
-    any
-  >(sendMessage, { onSuccess: chatFeedRef.current?.refreshFeed });
+  const { isSendingMessage, sendMessage } = useSendMessage();
 
   async function handleMessageSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    await mutateMessage({
-      type: chatType,
-      from: user.id,
-      to: id,
-      message,
-    });
-
-    setMessage("");
+    sendMessage(
+      {
+        type: chatType,
+        to: id,
+        message,
+      },
+      {
+        onSuccess: () => {
+          chatFeedRef.current?.refreshFeed();
+          setMessage("");
+        },
+      }
+    );
   }
 
   return (
@@ -48,14 +47,13 @@ export const Chat = React.memo(({ chatType, id, name }: Props) => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
-          <button
+          <ButtonWithSpinner
+            isLoading={isSendingMessage}
+            disabled={message === "" || isSendingMessage}
             type="submit"
-            className="chat__send-btn"
-            disabled={message === ""}
           >
             Send
-            {isMutatingMessage && <Spinner />}
-          </button>
+          </ButtonWithSpinner>
         </form>
       </footer>
     </div>

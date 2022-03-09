@@ -5,17 +5,23 @@ type ButtonWithSpinnerProps = {
   children: React.ReactNode;
   isLoading: boolean;
   className?: string;
+  disabled?: boolean;
   [propName: string]: any;
 };
 
 export function ButtonWithSpinner({
   children,
-  isLoading,
-  className,
+  isLoading = false,
+  className = "",
+  disabled = false,
   ...restProps
 }: ButtonWithSpinnerProps) {
   return (
-    <button className={`btn ${className}`} {...restProps}>
+    <button
+      className={`btn ${disabled && "btn--disabled"} ${className}`}
+      disabled={disabled}
+      {...restProps}
+    >
       {children}
       {isLoading && <Spinner />}
     </button>

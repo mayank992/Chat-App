@@ -37,6 +37,8 @@ export function useQuery<T>(
   const isFetching = state.status === QueryStatus.fetching;
 
   function fetchData(): [AbortController, Promise<any>] {
+    // TODO - create a seperate function for refetch data
+    // TODO - create a ref for abort controller to abort any pending request before unmount
     setState((prevState) => ({
       ...prevState,
       status:
@@ -80,9 +82,11 @@ export function useQuery<T>(
     setState((curState) => ({ ...curState, status: QueryStatus.loading }));
     [abortController] = fetchData();
 
+    // TODO - change name to polling interval
     if (refetchInterval != null) {
       timerId = window.setInterval(() => {
         let promise: Promise<any>;
+        // TODO - think more over case - order of request
         [abortController, promise] = fetchData();
 
         promise.catch((error) => {

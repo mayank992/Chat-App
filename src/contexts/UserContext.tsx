@@ -3,7 +3,7 @@ import { UserType } from "../types";
 
 export const UserContext = createContext<[any, any]>([null, () => {}]);
 
-export function useUser(): [any, any] {
+export function useUserContext(): [any, any] {
   const value = useContext(UserContext);
 
   return value;

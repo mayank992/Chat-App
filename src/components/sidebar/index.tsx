@@ -1,11 +1,18 @@
-import { useContext, useCallback } from "react";
-import { UserContext } from "../../contexts/UserContext";
-import { JoinedChannelType, ConnectionType, Selected } from "../../types";
-import { ModalContents } from "../common/modal/index";
-import { CHAT_TYPE } from "../../constants";
+import { useCallback } from "react";
+import { useUserContext } from "../../contexts/UserContext";
 import { CreateChannel } from "./CreateChannel";
-import { AddUser } from "./AddUser";
-import { Menu } from "./Menu";
+import { AddUserDm } from "./AddUserDm";
+
+import { JoinedChannelType, ConnectionType, Selected } from "../../types";
+import { CHAT_TYPE } from "../../constants";
+
+import { Modal, ModalOpenButton, ModalContents } from "../common/modal";
+import { Collapsible } from "../common/collapsible/index";
+import { List, ListItem } from "../common/list/index";
+import { Icon } from "../common/icons/index";
+
+import hashIcon from "../../assets/hashtag.png";
+import userIcon from "../../assets/user.png";
 import "./Sidebar.css";
 
 type Props = {
@@ -16,7 +23,7 @@ type Props = {
 };
 
 export function Sidebar({ users, channels, selected, changeSelected }: Props) {
-  const [user] = useContext(UserContext);
+  const [user] = useUserContext();
 
   const handleDirectMessageSelect = useCallback((connectionId: string) => {
     changeSelected({ type: CHAT_TYPE.DM, id: connectionId });
@@ -31,28 +38,68 @@ export function Sidebar({ users, channels, selected, changeSelected }: Props) {
       <header className="sidebar__header">
         <h2>{user.username}</h2>
       </header>
-      <Menu
-        title="Channels"
-        items={channels}
-        selectedId={selected.id}
-        onChangeSelected={handleChannelSelect}
-        modalContent={
-          <ModalContents title="Create channel">
-            <CreateChannel />
-          </ModalContents>
-        }
-      />
-      <Menu
-        title="Direct Messages"
-        items={users}
-        selectedId={selected.id}
-        onChangeSelected={handleDirectMessageSelect}
-        modalContent={
-          <ModalContents title="Add user">
-            <AddUser id={user.id} chatType={CHAT_TYPE.DM} />
-          </ModalContents>
-        }
-      />
+      <Collapsible defaultIsOpen={true}>
+        <Collapsible.Header>
+          <p className="list-item__text">Channels</p>
+          <Modal>
+            <ModalOpenButton>
+              <Icon>+</Icon>
+            </ModalOpenButton>
+            <ModalContents title="Create channel">
+              <CreateChannel />
+            </ModalContents>
+          </Modal>
+        </Collapsible.Header>
+        <Collapsible.Content>
+          <List>
+            {channels.map((channel) => (
+              <ListItem
+                key={channel.id}
+                isActive={selected.id === channel.id}
+                onClick={() => handleChannelSelect(channel.id)}
+              >
+                <img
+                  src={hashIcon}
+                  alt="channel-icon"
+                  style={{ maxHeight: "100%" }}
+                />
+                <p className="list-item__text">{channel.name}</p>
+              </ListItem>
+            ))}
+          </List>
+        </Collapsible.Content>
+      </Collapsible>
+      <Collapsible defaultIsOpen={true}>
+        <Collapsible.Header>
+          <p className="list-item__text">Direct messages</p>
+          <Modal>
+            <ModalOpenButton>
+              <Icon>+</Icon>
+            </ModalOpenButton>
+            <ModalContents title="Add user">
+              <AddUserDm />
+            </ModalContents>
+          </Modal>
+        </Collapsible.Header>
+        <Collapsible.Content>
+          <List>
+            {users.map((user) => (
+              <ListItem
+                key={user.id}
+                isActive={selected.id === user.id}
+                onClick={() => handleDirectMessageSelect(user.id)}
+              >
+                <img
+                  src={userIcon}
+                  alt="channel-icon"
+                  style={{ maxHeight: "100%" }}
+                />
+                <p className="list-item__text">{user.name}</p>
+              </ListItem>
+            ))}
+          </List>
+        </Collapsible.Content>
+      </Collapsible>
     </div>
   );
 }

@@ -1,4 +1,4 @@
 export enum CHAT_TYPE {
-  CHANNEL,
-  DM,
+  CHANNEL = "CHANNEL",
+  DM = "DM",
 }

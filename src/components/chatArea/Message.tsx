@@ -3,13 +3,10 @@ import userIcon from "../../assets/user.png";
 import { MessageType } from "../../types";
 
 type MessagePropsType = {
-  message: any;
+  message: MessageType;
 };
 
-export function Message(
-  { message }: MessagePropsType,
-  ref: React.ForwardedRef<HTMLDivElement>
-) {
+export function Message({ message }: MessagePropsType) {
   return (
     <div className="message">
       <img src={userIcon} className="message__user-img" alt="user-img" />

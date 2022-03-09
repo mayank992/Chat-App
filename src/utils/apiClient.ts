@@ -38,7 +38,5 @@ export async function client(
     ...customConfig,
   };
 
-  return axios(config)
-    .then((res) => res.data)
-    .catch((error) => error.response);
+  return axios(config).then((res) => res.data);
 }
