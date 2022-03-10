@@ -1,4 +1,4 @@
-.modal-container {
+.modal-wrapper {
   width: 100vw;
   height: 100vh;
   background-color: rgba(10, 12, 13, 0.6);
@@ -24,7 +24,7 @@
   flex-direction: column;
 }
 
-.modal-hedear {
+.modal__hedear {
   border-bottom: 0.1px solid #454545;
   height: 60px;
   background-color: #19171c;
@@ -34,9 +34,19 @@
   padding: 0 20px;
 }
 
-.modal-hedear button {
-  border: none;
-  background-color: #19171c;
-  color: lightgray;
+.modal__hedear-close-btn {
+  width: 25px;
+  height: 25px;
+  font-size: 18px;
+  border-radius: 5px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  object-fit: contain;
+}
+
+.modal__hedear-close-btn:hover {
+  background-color: #6e6d74;
   cursor: pointer;
 }

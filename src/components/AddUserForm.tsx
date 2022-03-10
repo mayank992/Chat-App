@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { ButtonWithSpinner } from "./common/button/index";
-import { ErrorMessage, SuccessMessage } from "./common/Messages";
+import { ButtonWithSpinner } from "./library/button/index";
+import { ErrorMessage, SuccessMessage } from "./library/Messages";
 
 type AddUserPropType = {
   isLoading: boolean;

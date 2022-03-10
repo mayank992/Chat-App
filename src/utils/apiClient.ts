@@ -1,5 +1,4 @@
 import axios from "axios";
-import { HttpMethods } from "../types/requestTypes";
 
 const BASE_URL = "";
 
@@ -10,17 +9,18 @@ type ReqHeaders = {
 type CustomConfig = {
   data?: any;
   token?: string;
-  method?: HttpMethods;
+  method?: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
   headers?: ReqHeaders;
   [key: string]: any;
 };
 
 export async function client(
   endpoint: string,
+  userId: string | null,
   {
     data,
     token,
-    method,
+    method = "GET",
     headers: customHeaders,
     ...customConfig
   }: CustomConfig = {}
@@ -28,11 +28,12 @@ export async function client(
   const config = {
     url: endpoint,
     baseURL: BASE_URL,
-    method: method || HttpMethods.GET,
+    method,
     data,
     headers: {
       Authorization: token ? `Bearer ${token}` : "",
       "Content-Type": data ? "application/json" : "",
+      userid: userId || "", // temporary header
       ...customHeaders,
     },
     ...customConfig,

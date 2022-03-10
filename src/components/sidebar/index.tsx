@@ -1,15 +1,14 @@
 import { useCallback } from "react";
 import { useUserContext } from "../../contexts/UserContext";
-import { CreateChannel } from "./CreateChannel";
-import { AddUserDm } from "./AddUserDm";
+import { CreateChannelModal } from "./CreateChannelModal";
+import { AddUserDmModal } from "./AddUserDmModal";
 
 import { JoinedChannelType, ConnectionType, Selected } from "../../types";
 import { CHAT_TYPE } from "../../constants";
 
-import { Modal, ModalOpenButton, ModalContents } from "../common/modal";
-import { Collapsible } from "../common/collapsible/index";
-import { List, ListItem } from "../common/list/index";
-import { Icon } from "../common/icons/index";
+import { Collapsible } from "../library/collapsible/index";
+import { List, ListItem } from "../library/list/index";
+import { useWindow } from "../../hooks/useWindow";
 
 import hashIcon from "../../assets/hashtag.png";
 import userIcon from "../../assets/user.png";
@@ -24,6 +23,11 @@ type Props = {
 
 export function Sidebar({ users, channels, selected, changeSelected }: Props) {
   const [user] = useUserContext();
+  const {
+    window: modalName,
+    openWindow: openModal,
+    closeWindow: closeModal,
+  } = useWindow<"createChannel" | "addUserDm">();
 
   const handleDirectMessageSelect = useCallback((connectionId: string) => {
     changeSelected({ type: CHAT_TYPE.DM, id: connectionId });
@@ -38,67 +42,81 @@ export function Sidebar({ users, channels, selected, changeSelected }: Props) {
       <header className="sidebar__header">
         <h2>{user.username}</h2>
       </header>
-      <Collapsible defaultIsOpen={true}>
-        <Collapsible.Header>
-          <p className="list-item__text">Channels</p>
-          <Modal>
-            <ModalOpenButton>
-              <Icon>+</Icon>
-            </ModalOpenButton>
-            <ModalContents title="Create channel">
-              <CreateChannel />
-            </ModalContents>
-          </Modal>
-        </Collapsible.Header>
-        <Collapsible.Content>
-          <List>
-            {channels.map((channel) => (
-              <ListItem
-                key={channel.id}
-                isActive={selected.id === channel.id}
-                onClick={() => handleChannelSelect(channel.id)}
-              >
-                <img
-                  src={hashIcon}
-                  alt="channel-icon"
-                  style={{ maxHeight: "100%" }}
-                />
-                <p className="list-item__text">{channel.name}</p>
-              </ListItem>
-            ))}
-          </List>
-        </Collapsible.Content>
+      <Collapsible
+        defaultIsOpen={true}
+        headerContent={
+          <>
+            <p className="list-item__text">Channels</p>
+            <div
+              className="icon"
+              onClick={(e) => {
+                e.stopPropagation();
+                openModal("createChannel");
+              }}
+            >
+              +
+            </div>
+            <CreateChannelModal
+              isOpen={modalName === "createChannel"}
+              onClose={closeModal}
+            />
+          </>
+        }
+      >
+        <List>
+          {channels.map((channel) => (
+            <ListItem
+              key={channel.id}
+              isActive={selected.id === channel.id}
+              onClick={() => handleChannelSelect(channel.id)}
+            >
+              <img
+                src={hashIcon}
+                alt="channel-icon"
+                style={{ maxHeight: "100%" }}
+              />
+              <p className="list-item__text">{channel.name}</p>
+            </ListItem>
+          ))}
+        </List>
       </Collapsible>
-      <Collapsible defaultIsOpen={true}>
-        <Collapsible.Header>
-          <p className="list-item__text">Direct messages</p>
-          <Modal>
-            <ModalOpenButton>
-              <Icon>+</Icon>
-            </ModalOpenButton>
-            <ModalContents title="Add user">
-              <AddUserDm />
-            </ModalContents>
-          </Modal>
-        </Collapsible.Header>
-        <Collapsible.Content>
-          <List>
-            {users.map((user) => (
-              <ListItem
-                key={user.id}
-                isActive={selected.id === user.id}
-                onClick={() => handleDirectMessageSelect(user.id)}
-              >
-                <img
-                  src={userIcon}
-                  alt="channel-icon"
-                  style={{ maxHeight: "100%" }}
-                />
-                <p className="list-item__text">{user.name}</p>
-              </ListItem>
-            ))}
-          </List>
-        </Collapsible.Content>
+      <Collapsible
+        defaultIsOpen={true}
+        headerContent={
+          <>
+            <p className="list-item__text">Direct messages</p>
+            <div
+              className="icon"
+              onClick={(e) => {
+                e.stopPropagation();
+                openModal("addUserDm");
+              }}
+            >
+              +
+            </div>
+            <AddUserDmModal
+              isOpen={modalName === "addUserDm"}
+              onClose={closeModal}
+            />
+          </>
+        }
+      >
+        <List>
+          {users.map((user) => (
+            <ListItem
+              key={user.id}
+              isActive={selected.id === user.id}
+              onClick={() => handleDirectMessageSelect(user.id)}
+            >
+              <img
+                src={userIcon}
+                alt="channel-icon"
+                style={{ maxHeight: "100%" }}
+              />
+              <p className="list-item__text">{user.name}</p>
+            </ListItem>
+          ))}
+        </List>
       </Collapsible>
     </div>
   );

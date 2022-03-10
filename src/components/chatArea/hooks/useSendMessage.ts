@@ -1,6 +1,6 @@
 import { useMutation } from "../../../hooks/useMutation";
-import { sendMessageAPI } from "../../../helpers/index";
 import { useUserContext } from "../../../contexts/UserContext";
+import { client } from "../../../utils/apiClient";
 import { CHAT_TYPE } from "../../../constants";
 
 type SendMessageReq = {
@@ -16,7 +16,10 @@ export function useSendMessage() {
     { message: string },
     SendMessageReq
   >((sendMessageReq: SendMessageReq) =>
-    sendMessageAPI(user.id, sendMessageReq)
+    client("/messages", user.id, {
+      data: sendMessageReq,
+      method: "POST",
+    })
   );
 
   return { isSendingMessage, sendMessage };

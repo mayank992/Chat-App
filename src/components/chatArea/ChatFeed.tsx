@@ -1,16 +1,9 @@
-import React, {
-  useRef,
-  useContext,
-  useImperativeHandle,
-  useLayoutEffect,
-} from "react";
-import { FullPageSpinner } from "../common/spinner";
+import React, { useRef, useImperativeHandle, useLayoutEffect } from "react";
+import { FullPageSpinner } from "../library/spinner";
 import { Message } from "./Message";
-import { MessageType } from "../../types";
-import { getLatestMessages } from "../../helpers";
-import { useQuery } from "../../hooks/useQuery";
-import { UserContext } from "../../contexts/UserContext";
 import { CHAT_TYPE } from "../../constants";
+import { useGetMessages } from "./hooks/useGetMessages";
+import { ErrorMessage } from "../library/Messages";
 
 type ChatFeedProps = {
   chatType: CHAT_TYPE;
@@ -19,16 +12,10 @@ type ChatFeedProps = {
 
 export const ChatFeed = React.forwardRef(
   ({ chatType, id }: ChatFeedProps, ref) => {
-    const [user] = useContext(UserContext);
     const chatFeedRef = useRef<HTMLDivElement>(null);
-    const {
-      data: messages,
-      refreshData,
-      isLoading,
-    } = useQuery<{ data: MessageType[] }>(
-      [chatType, id],
-      ({ signal }) => getLatestMessages(user.id, chatType, id, { signal }),
-      { refetchInterval: 5000 }
+    const { messages, isLoading, refetchData, isError, error } = useGetMessages(
+      chatType,
+      id
     );
 
     useLayoutEffect(() => {
@@ -38,18 +25,16 @@ export const ChatFeed = React.forwardRef(
     }, [messages]);
 
     useImperativeHandle(ref, () => ({
-      refreshFeed: refreshData,
+      refreshFeed: refetchData,
     }));
 
     return (
       <div className="chat__feed" ref={chatFeedRef}>
-        {isLoading ? (
-          <FullPageSpinner size="medium" />
-        ) : (
-          messages?.data.map((message) => {
-            return <Message key={message.id} message={message} />;
-          })
-        )}
+        {isLoading && <FullPageSpinner size="medium" />}
+        {isError && <ErrorMessage message={error.message} />}
+        {messages?.data.map((message) => {
+          return <Message key={message.id} message={message} />;
+        })}
       </div>
     );
   }

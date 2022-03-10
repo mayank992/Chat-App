@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { ChatFeed } from "./ChatFeed";
 import { ChatHeader } from "./ChatHeader";
 import { CHAT_TYPE } from "../../constants/index";
-import { ButtonWithSpinner } from "../common/button";
+import { ButtonWithSpinner } from "../library/button";
 import { useSendMessage } from "./hooks/useSendMessage";
 import "./ChatArea.css";
 

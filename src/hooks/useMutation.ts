@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { messages } from "../constants/errorMessages";
+import { MESSAGES } from "../constants/errorMessages";
 
 enum MutationStatus {
   loading = "loading",
@@ -55,7 +55,7 @@ export function useMutation<TData, TError, TParams>(
       .catch((error) => {
         let errorData = error.response
           ? error.response.data
-          : { message: messages.NETWORK_ERROR };
+          : { message: MESSAGES.NETWORK_ERROR };
 
         if (!errorData.message) {
           errorData = { message: "Something went wrong" };

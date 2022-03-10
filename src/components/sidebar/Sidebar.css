@@ -22,13 +22,19 @@
   gap: 10px;
 }
 
-.list-item__badge {
-  padding: 2px 5px;
-  background-color: #980f0f;
-  border-radius: 10px;
+.icon {
+  width: 25px;
+  height: 25px;
+  font-size: 18px;
+  border-radius: 5px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  object-fit: contain;
 }
 
-.badge {
-  background-color: #980f0f;
-  border-radius: 10px;
+.icon:hover {
+  background-color: #6e6d74;
+  cursor: pointer;
 }

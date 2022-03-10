@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { messages } from "../constants/errorMessages";
+import { useEffect, useState, useRef } from "react";
+import { MESSAGES } from "../constants/errorMessages";
 import isEqual from "lodash.isequal";
 
 enum QueryStatus {
@@ -11,7 +11,7 @@ enum QueryStatus {
 }
 
 type QueryOptions = {
-  refetchInterval?: number;
+  pollingInterval?: number;
 };
 
 export function useQuery<T>(
@@ -19,7 +19,8 @@ export function useQuery<T>(
   fn: (controller: AbortController) => Promise<any>,
   options: QueryOptions = {}
 ) {
-  const { refetchInterval } = options;
+  const { pollingInterval } = options;
+  const abortControllerRef = useRef<AbortController>();
   const [state, setState] = useState<{
     status: QueryStatus;
     data: T | null;
@@ -36,71 +37,65 @@ export function useQuery<T>(
   const isIdle = state.status === QueryStatus.idle;
   const isFetching = state.status === QueryStatus.fetching;
 
-  function fetchData(): [AbortController, Promise<any>] {
-    // TODO - create a seperate function for refetch data
-    // TODO - create a ref for abort controller to abort any pending request before unmount
+  async function fetchData() {
+    if (isLoading || isFetching) return Promise.resolve();
+
     setState((prevState) => ({
       ...prevState,
       status:
-        prevState.status === QueryStatus.loading
+        prevState.status === QueryStatus.idle
           ? QueryStatus.loading
           : QueryStatus.fetching,
     }));
 
-    const controller = new AbortController();
+    abortControllerRef.current = new AbortController();
 
-    const promise = fn(controller)
-      .then((response) => {
-        setState(({ data }) => {
-          return {
-            data: isEqual(data, response) ? data : response,
-            status: QueryStatus.success,
-            error: null,
-          };
-        });
-      })
-      .catch((error) => {
-        const errorData = error.response
-          ? error.response.data
-          : { message: messages.NETWORK_ERROR };
+    try {
+      const response = await fn(abortControllerRef.current);
 
-        setState((prevState) => ({
-          ...prevState,
-          status: QueryStatus.error,
-          error: errorData,
-        }));
-        throw error;
+      setState(({ data }) => {
+        return {
+          data: isEqual(data, response) ? data : response,
+          status: QueryStatus.success,
+          error: null,
+        };
       });
+    } catch (error: any) {
+      const errorData = error.response
+        ? error.response.data
+        : { message: MESSAGES.NETWORK_ERROR };
 
-    return [controller, promise];
+      setState((prevState) => ({
+        ...prevState,
+        status: QueryStatus.error,
+        error: errorData,
+      }));
+
+      throw errorData;
+    }
   }
 
   useEffect(() => {
     let timerId: number | undefined;
-    let abortController: AbortController;
 
-    setState((curState) => ({ ...curState, status: QueryStatus.loading }));
-    [abortController] = fetchData();
+    (async function poll() {
+      try {
+        await fetchData();
 
-    // TODO - change name to polling interval
-    if (refetchInterval != null) {
-      timerId = window.setInterval(() => {
-        let promise: Promise<any>;
-        // TODO - think more over case - order of request
-        [abortController, promise] = fetchData();
-
-        promise.catch((error) => {
-          clearInterval(timerId);
-        });
-      }, refetchInterval);
-    }
+        if (pollingInterval != null) {
+          timerId = window.setTimeout(poll, pollingInterval);
+        }
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    })();
 
     return () => {
-      // aborts the pending api call (if any) before applying new effect
-      abortController?.abort();
-      clearInterval(timerId);
+      setState({ status: QueryStatus.idle, data: null, error: null });
+      abortControllerRef.current?.abort();
+      clearTimeout(timerId);
     };
-  }, [...queryKeys, refetchInterval]);
+  }, [...queryKeys, pollingInterval]);
 
   return {
     data: state.data,
@@ -110,6 +105,6 @@ export function useQuery<T>(
     isSuccess,
     isIdle,
     isFetching,
-    refreshData: fetchData,
+    refetchData: fetchData,
   };
 }

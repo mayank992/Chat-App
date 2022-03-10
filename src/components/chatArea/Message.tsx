@@ -1,4 +1,3 @@
-import React from "react";
 import userIcon from "../../assets/user.png";
 import { MessageType } from "../../types";
 

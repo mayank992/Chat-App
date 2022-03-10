@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Login } from "./pages/login/index";
 import { UserContext } from "./contexts/UserContext";
 import { UserType } from "./types/index";
-import { FullPageSpinner } from "./components/common/spinner";
+import { FullPageSpinner } from "./components/library/spinner";
 import "./App.css";
 
 const Main = React.lazy(() => import("./pages/main/index"));

@@ -1,11 +1,9 @@
 import { useState, useCallback } from "react";
-import { useUserContext } from "../../contexts/UserContext";
 import { ChatArea } from "../../components/chatArea/index";
 import { Sidebar } from "../../components/sidebar/index";
 import { CHAT_TYPE } from "../../constants/index";
-import { getUserDetails } from "../../helpers/index";
-import { SplitPane } from "../../components/common/SplitPane";
-import { useQuery } from "../../hooks/useQuery";
+import { SplitPane } from "../../components/library/SplitPane";
+import { useGetUserDetails } from "../../hooks/useGetUserDetails";
 import "./Main.css";
 
 type Selected = {
@@ -14,13 +12,7 @@ type Selected = {
 };
 
 export default function Main() {
-  const [user] = useUserContext();
-  const { data: userData } = useQuery<any>(
-    [user.id],
-    ({ signal }) => getUserDetails(user.id, { signal }),
-    { refetchInterval: 5000 }
-  );
-  // TODO - fix name
+  const { userData } = useGetUserDetails();
   const [selectedChat, setSelectedChat] = useState<Selected>({
     type: CHAT_TYPE.DM,
     id: null,
@@ -57,6 +49,7 @@ export default function Main() {
           rightPane={
             selectedItem && (
               <ChatArea
+                key={selectedChat.id}
                 chatType={selectedChat.type}
                 id={selectedItem.id}
                 name={selectedItem.name}
