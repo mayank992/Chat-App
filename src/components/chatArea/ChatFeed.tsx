@@ -24,6 +24,7 @@ export const ChatFeed = React.forwardRef(
       }
     }, [messages]);
 
+    // instead of using imperative handler lift this messages state up
     useImperativeHandle(ref, () => ({
       refreshFeed: refetchData,
     }));

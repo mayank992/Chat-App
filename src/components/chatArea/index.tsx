@@ -21,11 +21,7 @@ export const ChatArea = React.memo(({ chatType, id, name }: Props) => {
     e.preventDefault();
 
     sendMessage(
-      {
-        type: chatType,
-        to: id,
-        message,
-      },
+      { to: id, message },
       {
         onSuccess: () => {
           chatFeedRef.current?.refreshFeed();

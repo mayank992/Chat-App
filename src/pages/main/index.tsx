@@ -18,6 +18,7 @@ export default function Main() {
     id: null,
   });
 
+  // use usememo here
   const selectedItem =
     selectedChat.type === CHAT_TYPE.DM
       ? userData?.connections.find(
