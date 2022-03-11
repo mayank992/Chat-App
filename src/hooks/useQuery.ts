@@ -86,7 +86,7 @@ export function useQuery<T>(
           timerId = window.setTimeout(poll, pollingInterval);
         }
       } catch (error: any) {
-        console.log(error.message);
+        console.error(error.message);
       }
     })();
 

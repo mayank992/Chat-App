@@ -12,7 +12,7 @@ type Props = {
   name: string;
 };
 
-export const ChatArea = React.memo(({ chatType, id, name }: Props) => {
+export const ChatArea = ({ chatType, id, name }: Props) => {
   const [message, setMessage] = useState<string>("");
   const chatFeedRef = useRef<{ refreshFeed: () => {} }>(null);
   const { isSendingMessage, sendMessage } = useSendMessage();
@@ -54,4 +54,4 @@ export const ChatArea = React.memo(({ chatType, id, name }: Props) => {
       </footer>
     </div>
   );
-});
+};

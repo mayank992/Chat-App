@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { ChatArea } from "../../components/chatArea/index";
 import { Sidebar } from "../../components/sidebar/index";
 import { CHAT_TYPE } from "../../constants/index";
@@ -18,15 +18,15 @@ export default function Main() {
     id: null,
   });
 
-  // use usememo here
-  const selectedItem =
-    selectedChat.type === CHAT_TYPE.DM
+  const selectedItem = useMemo(() => {
+    return selectedChat.type === CHAT_TYPE.DM
       ? userData?.connections.find(
           (connection: any) => connection.id === selectedChat.id
         )
       : userData?.channels.find(
           (channel: any) => channel.id === selectedChat.id
         );
+  }, [selectedChat, userData]);
 
   const changeSelected = useCallback((toSelect: Selected) => {
     setSelectedChat(toSelect);
