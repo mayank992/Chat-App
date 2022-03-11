@@ -30,7 +30,6 @@ export function ChatHeader({ name, chatType, id }: ChatHeaderProps) {
             onClick={() => openModal("channelMembers")}
           >
             <img className="chat-members__icon" src={userIcon} alt="user-img" />
-            <p className="chat__members-count">{3}</p>
           </span>
           <ChannelMembersModal
             channelId={id}
