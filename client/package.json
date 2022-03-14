@@ -43,7 +43,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:8080",
   "devDependencies": {
     "@types/lodash.isequal": "^4.5.5"
   }

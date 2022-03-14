@@ -7,7 +7,7 @@ const connectionRouter = require("./routes/connections");
 const channelRouter = require("./routes/channels");
 const messageRouter = require("./routes/messages");
 
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const app = express();
 const publicDirPath = path.join(__dirname, "./client/build");
 
