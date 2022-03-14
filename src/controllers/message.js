@@ -1,6 +1,6 @@
-const User = require("../../models/User");
-const Channel = require("../../models/Channel");
-const Message = require("../../models/Message");
+const User = require("../models/User");
+const Channel = require("../models/Channel");
+const Message = require("../models/Message");
 
 function createMessage(from, to, message) {
   const newMessage = Message.insertOne({
