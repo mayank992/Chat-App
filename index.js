@@ -1,5 +1,5 @@
 const express = require("express");
-const cors = require("cors");
+const path = require("path");
 const auth = require("./middlewares/auth");
 
 const userRouter = require("./routes/users");
@@ -9,15 +9,20 @@ const messageRouter = require("./routes/messages");
 
 const PORT = 8080;
 const app = express();
+const publicDirPath = path.join(__dirname, "./client/build");
 
-app.use(cors());
 app.use(express.json());
+app.use(express.static(publicDirPath));
 
 app.use("/", auth);
 app.use("/users", userRouter);
 app.use("/connections", connectionRouter);
 app.use("/channels", channelRouter);
 app.use("/messages", messageRouter);
+
+app.get("/", (req, res) => {
+  res.status(200).sendFile(path.join(__dirname, "./client/build/index.html"));
+});
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}...`);
