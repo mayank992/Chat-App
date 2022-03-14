@@ -1,0 +1,40 @@
+.sidebar {
+  color: lightgray;
+  width: 100%;
+  height: 100%;
+  background-color: #19171c;
+  border: 0.1px solid #454545;
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  gap: 10px;
+}
+
+.sidebar__header {
+  padding: 5px 10px;
+  border: 0.1px solid #454545;
+  border-left: none;
+  background-color: #19171c;
+  height: 50px;
+  color: lightgray;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon {
+  width: 25px;
+  height: 25px;
+  font-size: 18px;
+  border-radius: 5px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  object-fit: contain;
+}
+
+.icon:hover {
+  background-color: #6e6d74;
+  cursor: pointer;
+}

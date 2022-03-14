@@ -1,0 +1,32 @@
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 5px;
+  margin-left: 15px;
+  background-color: #347a5c;
+  color: lightgray;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn:hover {
+  background-color: #255741;
+  cursor: pointer;
+}
+
+.btn--disabled {
+  background-color: #222529;
+  color: #454545;
+}
+
+.btn--disabled:hover {
+  cursor: auto;
+  background-color: #222529;
+  color: #454545;
+}
