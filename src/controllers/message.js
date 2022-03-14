@@ -1,14 +1,13 @@
-const User = require("../models/User");
-const Channel = require("../models/Channel");
-const Message = require("../models/Message");
-const { getFormatedTime } = require("../utils");
+const User = require("../../models/User");
+const Channel = require("../../models/Channel");
+const Message = require("../../models/Message");
 
 function createMessage(from, to, message) {
   const newMessage = Message.insertOne({
     message,
     from,
     to,
-    time: getFormatedTime(),
+    time: new Date().toISOString(),
   });
 
   return newMessage;

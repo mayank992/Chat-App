@@ -9,7 +9,7 @@ const messageRouter = require("./routes/messages");
 
 const PORT = process.env.PORT || 8080;
 const app = express();
-const publicDirPath = path.join(__dirname, "./client/build");
+const publicDirPath = path.join(__dirname, "../client/build");
 
 app.use(express.json());
 app.use(express.static(publicDirPath));
@@ -21,7 +21,7 @@ app.use("/channels", channelRouter);
 app.use("/messages", messageRouter);
 
 app.get("/", (req, res) => {
-  res.status(200).sendFile(path.join(__dirname, "./client/build/index.html"));
+  res.status(200).sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
 app.listen(PORT, () => {
