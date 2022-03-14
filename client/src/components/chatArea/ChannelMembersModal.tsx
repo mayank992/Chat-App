@@ -20,20 +20,18 @@ export function ChannelMembersModal({ isOpen, onClose, channelId }: Props) {
     <Modal title="Channel members" isOpen={isOpen} onClose={onClose}>
       {isLoading && <FullPageSpinner />}
       {isError && <ErrorMessage message={error.message} />}
-      {isSuccess && (
-        <List>
-          {members?.map((member) => (
-            <ListItem key={member.id} style={{ height: "60px" }}>
-              <img
-                className="chat-members__icon"
-                src={userIcon}
-                alt="user-icon"
-              />
-              <p>{member.name}</p>
-            </ListItem>
-          ))}
-        </List>
-      )}
+      <List>
+        {members?.map((member) => (
+          <ListItem key={member.id} style={{ height: "60px" }}>
+            <img
+              className="chat-members__icon"
+              src={userIcon}
+              alt="user-icon"
+            />
+            <p>{member.name}</p>
+          </ListItem>
+        ))}
+      </List>
     </Modal>
   );
 }
