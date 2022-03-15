@@ -2,10 +2,8 @@ const express = require("express");
 const path = require("path");
 const auth = require("./middlewares/auth");
 
-const userRouter = require("./routes/users");
-const connectionRouter = require("./routes/connections");
-const channelRouter = require("./routes/channels");
-const messageRouter = require("./routes/messages");
+const usersRouter = require("./routers/users");
+const channelsRouter = require("./routers/channels");
 
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -15,10 +13,8 @@ app.use(express.json());
 app.use(express.static(publicDirPath));
 
 app.use("/", auth);
-app.use("/users", userRouter);
-app.use("/connections", connectionRouter);
-app.use("/channels", channelRouter);
-app.use("/messages", messageRouter);
+app.use("/users", usersRouter);
+app.use("/channels", channelsRouter);
 
 app.get("/", (req, res) => {
   res.status(200).sendFile(path.join(__dirname, "../client/build/index.html"));

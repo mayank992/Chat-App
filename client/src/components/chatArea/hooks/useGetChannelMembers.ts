@@ -1,22 +1,15 @@
-import { useQuery } from "../../../hooks/useQuery";
-import { ConnectionType } from "../../../types";
-import { useUserContext } from "../../../contexts/UserContext";
-import { client } from "../../../utils/apiClient";
+import { useQuery } from '../../../hooks/useQuery';
+import { UserType } from '../../../types';
+import { useUserContext } from '../../../contexts/UserContext';
+import { client } from '../../../utils/apiClient';
 
 export function useGetChannelMembers(channelId: string) {
   const [user] = useUserContext();
-  const {
-    data: members,
-    isSuccess,
-    isLoading,
-    isError,
-    error,
-  } = useQuery<ConnectionType[]>(
+  const { data, isSuccess, isLoading, isError, error } = useQuery<{ members: UserType[] }>(
     [channelId],
-    ({ signal }) =>
-      client(`/channels/${channelId}/members`, user.id, { signal }),
+    ({ signal }) => client(`/channels/${channelId}/members`, user.id, { signal }),
     { pollingInterval: 5000 }
   );
 
-  return { members, isSuccess, isLoading, isError, error };
+  return { members: data?.members, isSuccess, isLoading, isError, error };
 }

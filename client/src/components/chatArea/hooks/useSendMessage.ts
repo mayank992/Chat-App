@@ -1,9 +1,9 @@
-import { useMutation } from "../../../hooks/useMutation";
-import { useUserContext } from "../../../contexts/UserContext";
-import { client } from "../../../utils/apiClient";
+import { useMutation } from '../../../hooks/useMutation';
+import { useUserContext } from '../../../contexts/UserContext';
+import { client } from '../../../utils/apiClient';
 
-type SendMessageReq = {
-  to: string;
+type SendMessageVariables = {
+  channelId: string;
   message: string;
 };
 
@@ -12,13 +12,13 @@ export function useSendMessage() {
   const { isLoading: isSendingMessage, mutate: sendMessage } = useMutation<
     any,
     { message: string },
-    SendMessageReq
-  >((sendMessageReq: SendMessageReq) =>
-    client("/messages", user.id, {
-      data: sendMessageReq,
-      method: "POST",
-    })
-  );
+    SendMessageVariables
+  >(({ channelId, message }: SendMessageVariables) => {
+    return client(`/channels/${channelId}/messages`, user.id, {
+      data: { text: message },
+      method: 'POST',
+    });
+  });
 
   return { isSendingMessage, sendMessage };
 }

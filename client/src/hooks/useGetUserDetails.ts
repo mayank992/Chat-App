@@ -1,6 +1,6 @@
-import { useQuery } from "./useQuery";
-import { client } from "../utils/apiClient";
-import { useUserContext } from "../contexts/UserContext";
+import { useQuery } from './useQuery';
+import { client } from '../utils/apiClient';
+import { useUserContext } from '../contexts/UserContext';
 
 export function useGetUserDetails() {
   const [user] = useUserContext();
@@ -8,15 +8,13 @@ export function useGetUserDetails() {
     isError,
     error,
     isSuccess,
-    data: userData,
+    data: userDetails,
     isLoading,
     isFetching,
     isIdle,
-  } = useQuery<any>(
-    [user.id],
-    ({ signal }) => client("/users/alldetails", user.id, { signal }),
-    { pollingInterval: 5000 }
-  );
+  } = useQuery<any>([user.id], ({ signal }) => client('/users/alldetails', user.id, { signal }), {
+    pollingInterval: 5000,
+  });
 
-  return { userData, isLoading, isError, error, isSuccess, isFetching, isIdle };
+  return { userDetails, isLoading, isError, error, isSuccess, isFetching, isIdle };
 }

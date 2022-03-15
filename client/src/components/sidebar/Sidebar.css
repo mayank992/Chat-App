@@ -21,20 +21,3 @@
   align-items: center;
   gap: 10px;
 }
-
-.icon {
-  width: 25px;
-  height: 25px;
-  font-size: 18px;
-  border-radius: 5px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  object-fit: contain;
-}
-
-.icon:hover {
-  background-color: #6e6d74;
-  cursor: pointer;
-}

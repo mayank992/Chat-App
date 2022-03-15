@@ -1,11 +1,11 @@
-import React, { useState, useContext } from "react";
-import { UserType } from "../../types";
-import { client } from "../../utils/apiClient";
-import { UserContext } from "../../contexts/UserContext";
-import { useMutation } from "../../hooks/useMutation";
-import { ErrorMessage } from "../../components/library/Messages";
-import { ButtonWithSpinner } from "../../components/library/button";
-import "./Login.css";
+import React, { useState, useContext } from 'react';
+import { UserType } from '../../types';
+import { client } from '../../utils/apiClient';
+import { UserContext } from '../../contexts/UserContext';
+import { useMutation } from '../../hooks/useMutation';
+import { ErrorMessage } from '../../components/library/Messages';
+import { ButtonWithSpinner } from '../../components/library/button';
+import './Login.css';
 
 type FormState = {
   username: string;
@@ -14,9 +14,9 @@ type FormState = {
 };
 
 const initialFormState = {
-  username: "",
-  firstname: "",
-  lastname: "",
+  username: '',
+  firstname: '',
+  lastname: '',
 };
 
 export function Login() {
@@ -24,14 +24,10 @@ export function Login() {
   const [formState, setFormState] = useState<FormState>(initialFormState);
 
   // TODO - create seperate hook for this login mutation
-  const { isError, error, mutate, isLoading } = useMutation<
-    UserType,
-    { message: string },
-    FormState
-  >(
+  const { isError, error, mutate, isLoading } = useMutation<UserType, { message: string }, FormState>(
     ({ username, firstname, lastname }: FormState) =>
-      client("/users/login", null, {
-        method: "POST",
+      client('/users/login', null, {
+        method: 'POST',
         data: {
           username,
           name: `${firstname} ${lastname}`,
@@ -59,37 +55,17 @@ export function Login() {
       <form className="login__form" onSubmit={submitHandler}>
         <label>
           Username
-          <input
-            className="login__input"
-            name="username"
-            value={formState.username}
-            onChange={changeHandler}
-          />
+          <input className="login__input" name="username" value={formState.username} onChange={changeHandler} />
         </label>
         <label>
           First name
-          <input
-            className="login__input"
-            name="firstname"
-            value={formState.firstname}
-            onChange={changeHandler}
-          />
+          <input className="login__input" name="firstname" value={formState.firstname} onChange={changeHandler} />
         </label>
         <label>
           Last name
-          <input
-            className="login__input"
-            name="lastname"
-            value={formState.lastname}
-            onChange={changeHandler}
-          />
+          <input className="login__input" name="lastname" value={formState.lastname} onChange={changeHandler} />
         </label>
-        <ButtonWithSpinner
-          className="submit-btn"
-          isLoading={isLoading}
-          disabled={isLoading}
-          type="submit"
-        >
+        <ButtonWithSpinner className="submit-btn" isLoading={isLoading} disabled={isLoading} type="submit">
           Login
         </ButtonWithSpinner>
         {isError && <ErrorMessage message={error?.message} />}

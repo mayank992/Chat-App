@@ -1,58 +1,24 @@
-import { useState, useCallback, useMemo } from "react";
-import { ChatArea } from "../../components/chatArea/index";
-import { Sidebar } from "../../components/sidebar/index";
-import { CHAT_TYPE } from "../../constants/index";
-import { SplitPane } from "../../components/library/SplitPane";
-import { useGetUserDetails } from "../../hooks/useGetUserDetails";
-import "./Main.css";
-
-type Selected = {
-  type: CHAT_TYPE;
-  id: string | null;
-};
+import { useState } from 'react';
+import { SplitPane } from '../../components/library/splitPane/index';
+import { Sidebar } from '../../components/sidebar/index';
+import { ChatArea } from '../../components/chatArea';
+import { ChannelType } from '../../types/index';
+import './Main.css';
 
 export default function Main() {
-  const { userData } = useGetUserDetails();
-  const [selectedChat, setSelectedChat] = useState<Selected>({
-    type: CHAT_TYPE.DM,
-    id: null,
-  });
-
-  const selectedItem = useMemo(() => {
-    return selectedChat.type === CHAT_TYPE.DM
-      ? userData?.connections.find(
-          (connection: any) => connection.id === selectedChat.id
-        )
-      : userData?.channels.find(
-          (channel: any) => channel.id === selectedChat.id
-        );
-  }, [selectedChat, userData]);
+  const [selectedChannel, setSelectedChannel] = useState<ChannelType | null>(null);
 
   return (
     <div className="main">
       <div className="main__body">
-        <SplitPane
-          minWidth="300px"
-          leftPane={
-            userData && (
-              <Sidebar
-                users={userData.connections}
-                channels={userData.channels}
-                selected={selectedChat}
-                changeSelected={setSelectedChat}
-              />
-            )
-          }
-          rightPane={
-            selectedItem && (
-              <ChatArea
-                key={selectedChat.id}
-                chatType={selectedChat.type}
-                chat={selectedItem}
-              />
-            )
-          }
-        />
+        <SplitPane>
+          <SplitPane.Slot name="leftPane">
+            <Sidebar selectedChannel={selectedChannel} onChannelChange={setSelectedChannel} />
+          </SplitPane.Slot>
+          <SplitPane.Slot name="rightPane">
+            {selectedChannel && <ChatArea key={selectedChannel.id} channel={selectedChannel} />}
+          </SplitPane.Slot>
+        </SplitPane>
       </div>
     </div>
   );

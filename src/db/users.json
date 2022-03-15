@@ -3,48 +3,39 @@
     "id": "pUYnXnyZ5aCzRRW14bzUV3",
     "username": "mayank992",
     "name": "Mayank Jindal",
-    "connections": [
-      "bzMBY52ZBjokV3VjDHxnea",
-      "bcG8aiF8aA1QUF8Metik97"
+    "directMessages": [
+      "rv4meZKGaSQaBC2Y6cNyZ6",
+      "cLCHXMNnPcbLU5zeXYrXx8"
     ],
     "channels": [
-      "2sJyhfU774q4JXQ1Fmb5N1",
-      "1CGTohT1TpMCm7Zoesj1Ea",
-      "9tiiNL2S2XVwg9MqwYnVem",
-      "o3Dyf5srAWqjTTa4xd5xkP",
-      "g5ocwz46ounjnr7GZ7bEqy",
-      "nVbrVs5KYccA8o7UDWW3Pw"
+      "kz8A1Ftj4GoHwXvdRrQwCY"
     ]
   },
   {
     "id": "bzMBY52ZBjokV3VjDHxnea",
     "username": "nishant444",
     "name": "Nishant Sharma",
-    "connections": [
-      "pUYnXnyZ5aCzRRW14bzUV3",
-      "bcG8aiF8aA1QUF8Metik97"
+    "directMessages": [
+      "rv4meZKGaSQaBC2Y6cNyZ6"
     ],
-    "channels": [
-      "2sJyhfU774q4JXQ1Fmb5N1",
-      "1CGTohT1TpMCm7Zoesj1Ea",
-      "9tiiNL2S2XVwg9MqwYnVem",
-      "g5ocwz46ounjnr7GZ7bEqy",
-      "nVbrVs5KYccA8o7UDWW3Pw"
-    ]
+    "channels": []
   },
   {
     "id": "bcG8aiF8aA1QUF8Metik97",
     "username": "Rishi123",
     "name": "Rishi Singh",
-    "connections": [
-      "pUYnXnyZ5aCzRRW14bzUV3",
-      "bzMBY52ZBjokV3VjDHxnea"
+    "directMessages": [
+      "cLCHXMNnPcbLU5zeXYrXx8"
     ],
     "channels": [
-      "2sJyhfU774q4JXQ1Fmb5N1",
-      "1CGTohT1TpMCm7Zoesj1Ea",
-      "o3Dyf5srAWqjTTa4xd5xkP",
-      "iBABeCx8CwQtzVftMLqzcK"
+      "kz8A1Ftj4GoHwXvdRrQwCY"
     ]
+  },
+  {
+    "id": "m9CjnuHRjrLqoy8rZsN5S9",
+    "username": "testuser123",
+    "name": "Test User",
+    "directMessages": [],
+    "channels": []
   }
 ]

@@ -1,0 +1,37 @@
+.icon {
+  width: 25px;
+  height: 25px;
+  font-size: 18px;
+  border-radius: 5px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  object-fit: contain;
+}
+
+.icon:hover {
+  background-color: #6e6d74;
+  cursor: pointer;
+}
+
+.arrow,
+.arrow--up {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid lightgray;
+}
+
+.arrow--right {
+  transform: rotate(90deg);
+}
+
+.arrow--down {
+  transform: rotate(180deg);
+}
+
+.arrow--left {
+  transform: rotate(270deg);
+}

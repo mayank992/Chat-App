@@ -1,5 +1,5 @@
-import { Spinner } from "../spinner/index";
-import "./Button.css";
+import { Spinner } from '../spinner/index';
+import './Button.css';
 
 type ButtonWithSpinnerProps = {
   children: React.ReactNode;
@@ -12,16 +12,12 @@ type ButtonWithSpinnerProps = {
 export function ButtonWithSpinner({
   children,
   isLoading = false,
-  className = "",
+  className = '',
   disabled = false,
   ...restProps
 }: ButtonWithSpinnerProps) {
   return (
-    <button
-      className={`btn ${disabled && "btn--disabled"} ${className}`}
-      disabled={disabled}
-      {...restProps}
-    >
+    <button className={`btn ${disabled && 'btn--disabled'} ${className}`} disabled={disabled} {...restProps}>
       {children}
       {isLoading && <Spinner />}
     </button>

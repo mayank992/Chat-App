@@ -16,15 +16,15 @@ class Channel {
     return channels.find((channel) => channel.id === channelId);
   }
 
+  findByChannelName(channelName) {
+    const channels = this.findAll();
+
+    return channels.find((channel) => channel.name === channelName);
+  }
+
   insertOne(newChannel) {
     const channels = this.findAll();
-    let channel = channels.find((channel) => channel.name === newChannel.name);
-
-    if (channel) {
-      throw new Error("channel name already taken");
-    }
-
-    channel = {
+    const channel = {
       id: short.generate(),
       ...newChannel,
     };

@@ -3,12 +3,22 @@ import { useState, useCallback } from "react";
 export function useToggle(initialState: boolean): {
   isOpen: boolean;
   toggle: () => void;
+  open: () => void;
+  close: () => void;
 } {
-  const [open, setOpen] = useState<boolean>(initialState);
+  const [isOpen, setIsOpen] = useState<boolean>(initialState);
 
   const toggle = useCallback(() => {
-    setOpen((val) => !val);
+    setIsOpen((val) => !val);
   }, []);
 
-  return { isOpen: open, toggle };
+  const open = useCallback(() => {
+    setIsOpen(true);
+  }, []);
+
+  const close = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
+  return { isOpen, toggle, open, close };
 }

@@ -16,13 +16,18 @@ class User {
     return users.find((user) => user.id === userId);
   }
 
+  findByUsername(username) {
+    const users = this.findAll();
+
+    return users.find((user) => user.username === username);
+  }
+
   insertOne(newUser) {
     const users = this.findAll();
     let user = users.find((user) => user.username === newUser.username);
 
     if (user) {
-      return user;
-      // throw new Error("username already taken");
+      throw new Error("username is already taken");
     }
 
     user = {
@@ -46,6 +51,8 @@ class User {
     });
 
     this.updateAll(updatedUsers);
+
+    return userData;
   }
 }
 
