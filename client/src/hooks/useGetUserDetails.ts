@@ -1,6 +1,7 @@
 import { useQuery } from './useQuery';
 import { client } from '../utils/apiClient';
 import { useUserContext } from '../contexts/UserContext';
+import { UserDetailsType } from '../types';
 
 export function useGetUserDetails() {
   const [user] = useUserContext();
@@ -12,7 +13,7 @@ export function useGetUserDetails() {
     isLoading,
     isFetching,
     isIdle,
-  } = useQuery<any>([user.id], ({ signal }) => client('/users/alldetails', user.id, { signal }), {
+  } = useQuery<UserDetailsType>([user.id], ({ signal }) => client('/users/alldetails', user.id, { signal }), {
     pollingInterval: 5000,
   });
 

@@ -7,7 +7,7 @@ import { AddIcon } from '../../../library/icons';
 import { ChannelType } from '../../../../types';
 
 type ChannelListProps = {
-  channels: ChannelType[];
+  channels?: ChannelType[];
   selectedChannelId?: string | null;
   onChannelChange: (channel: ChannelType) => void;
   onClickAddIcon: React.MouseEventHandler<HTMLDivElement>;

@@ -4,6 +4,14 @@ export type UserType = {
   username: string;
 };
 
+export type UserDetailsType = {
+  id: string;
+  name: string;
+  username: string;
+  directMessages: ChannelType[];
+  channels: ChannelType[];
+};
+
 export type ChannelType = {
   id: string;
   name: string;
