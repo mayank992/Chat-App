@@ -7,12 +7,14 @@ import { useWindow } from "../../hooks/useWindow";
 import userIcon from "../../assets/user.png";
 
 type ChatHeaderProps = {
-  name: string;
-  id: string;
   chatType: CHAT_TYPE;
+  chat: {
+    id: string;
+    name: string;
+  };
 };
 
-export function ChatHeader({ name, chatType, id }: ChatHeaderProps) {
+export function ChatHeader({ chatType, chat }: ChatHeaderProps) {
   const {
     window: modalName,
     openWindow: openModal,
@@ -22,7 +24,7 @@ export function ChatHeader({ name, chatType, id }: ChatHeaderProps) {
   return (
     <header className="chat__header">
       <img className="chat__icon" src={userLogo} alt="user-img" />
-      <p>{name}</p>
+      <p>{chat.name}</p>
       {chatType === CHAT_TYPE.CHANNEL && (
         <>
           <span
@@ -32,7 +34,7 @@ export function ChatHeader({ name, chatType, id }: ChatHeaderProps) {
             <img className="chat-members__icon" src={userIcon} alt="user-img" />
           </span>
           <ChannelMembersModal
-            channelId={id}
+            channelId={chat.id}
             isOpen={modalName === "channelMembers"}
             onClose={closeModal}
           />
@@ -45,7 +47,7 @@ export function ChatHeader({ name, chatType, id }: ChatHeaderProps) {
           <AddUserChannelModal
             isOpen={modalName === "addUserChannel"}
             onClose={closeModal}
-            channelId={id}
+            channelId={chat.id}
           />
         </>
       )}

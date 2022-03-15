@@ -1,21 +1,14 @@
 import ReactDOM from "react-dom";
 import "./Modal.css";
 
+const modalRoot = document.getElementById("modal-root");
+
 type ModalBaseProps = {
-  title: string;
   isOpen: boolean;
-  onClose: () => void;
   children: React.ReactNode;
 };
 
-const modalRoot = document.getElementById("modal-root");
-
-export function Modal({
-  title,
-  isOpen,
-  onClose,
-  children,
-}: ModalBaseProps): React.ReactElement {
+export function ModalBase({ isOpen, children }: ModalBaseProps) {
   if (!isOpen || !modalRoot) {
     return <></>;
   }
@@ -27,6 +20,27 @@ export function Modal({
         e.stopPropagation();
       }}
     >
+      {children}
+    </div>,
+    modalRoot
+  );
+}
+
+type ModalProps = {
+  title: string;
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+};
+
+export function Modal({
+  title,
+  isOpen,
+  onClose,
+  children,
+}: ModalProps): React.ReactElement {
+  return (
+    <ModalBase isOpen={isOpen}>
       <div className="modal">
         <header className="modal__hedear">
           <h2>{title}</h2>
@@ -36,7 +50,6 @@ export function Modal({
         </header>
         <div className="modal__body">{children}</div>
       </div>
-    </div>,
-    modalRoot
+    </ModalBase>
   );
 }

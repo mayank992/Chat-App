@@ -8,11 +8,13 @@ import "./ChatArea.css";
 
 type Props = {
   chatType: CHAT_TYPE;
-  id: string;
-  name: string;
+  chat: {
+    id: string;
+    name: string;
+  };
 };
 
-export const ChatArea = ({ chatType, id, name }: Props) => {
+export const ChatArea = React.memo(({ chatType, chat }: Props) => {
   const [message, setMessage] = useState<string>("");
   const chatFeedRef = useRef<{ refreshFeed: () => {} }>(null);
   const { isSendingMessage, sendMessage } = useSendMessage();
@@ -21,7 +23,7 @@ export const ChatArea = ({ chatType, id, name }: Props) => {
     e.preventDefault();
 
     sendMessage(
-      { to: id, message },
+      { to: chat.id, message },
       {
         onSuccess: () => {
           chatFeedRef.current?.refreshFeed();
@@ -33,8 +35,8 @@ export const ChatArea = ({ chatType, id, name }: Props) => {
 
   return (
     <div className="chat">
-      <ChatHeader id={id} chatType={chatType} name={name} />
-      <ChatFeed chatType={chatType} id={id} ref={chatFeedRef} />
+      <ChatHeader chatType={chatType} chat={chat} />
+      <ChatFeed chatType={chatType} chat={chat} ref={chatFeedRef} />
       <footer className="chat__footer">
         <form onSubmit={handleMessageSubmit}>
           <input
@@ -54,4 +56,4 @@ export const ChatArea = ({ chatType, id, name }: Props) => {
       </footer>
     </div>
   );
-};
+});

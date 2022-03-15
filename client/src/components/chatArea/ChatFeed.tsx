@@ -7,15 +7,18 @@ import { ErrorMessage } from "../library/Messages";
 
 type ChatFeedProps = {
   chatType: CHAT_TYPE;
-  id: string;
+  chat: {
+    id: string;
+    name: string;
+  };
 };
 
 export const ChatFeed = React.forwardRef(
-  ({ chatType, id }: ChatFeedProps, ref) => {
+  ({ chatType, chat }: ChatFeedProps, ref) => {
     const chatFeedRef = useRef<HTMLDivElement>(null);
     const { messages, isLoading, refetchData, isError, error } = useGetMessages(
       chatType,
-      id
+      chat.id
     );
 
     useLayoutEffect(() => {

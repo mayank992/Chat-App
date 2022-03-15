@@ -28,10 +28,6 @@ export default function Main() {
         );
   }, [selectedChat, userData]);
 
-  const changeSelected = useCallback((toSelect: Selected) => {
-    setSelectedChat(toSelect);
-  }, []);
-
   return (
     <div className="main">
       <div className="main__body">
@@ -43,7 +39,7 @@ export default function Main() {
                 users={userData.connections}
                 channels={userData.channels}
                 selected={selectedChat}
-                changeSelected={changeSelected}
+                changeSelected={setSelectedChat}
               />
             )
           }
@@ -52,8 +48,7 @@ export default function Main() {
               <ChatArea
                 key={selectedChat.id}
                 chatType={selectedChat.type}
-                id={selectedItem.id}
-                name={selectedItem.name}
+                chat={selectedItem}
               />
             )
           }
