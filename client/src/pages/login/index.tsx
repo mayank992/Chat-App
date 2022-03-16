@@ -64,6 +64,7 @@ export function Login() {
             name="username"
             value={formState.username}
             onChange={changeHandler}
+            required
           />
         </label>
         <label>
@@ -73,6 +74,7 @@ export function Login() {
             name="firstname"
             value={formState.firstname}
             onChange={changeHandler}
+            required
           />
         </label>
         <label>
@@ -82,6 +84,7 @@ export function Login() {
             name="lastname"
             value={formState.lastname}
             onChange={changeHandler}
+            required
           />
         </label>
         <ButtonWithSpinner
