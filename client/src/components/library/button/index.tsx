@@ -18,7 +18,7 @@ export function ButtonWithSpinner({
 }: ButtonWithSpinnerProps) {
   return (
     <button
-      className={`btn ${disabled && "btn--disabled"} ${className}`}
+      className={`btn ${disabled ? "btn--disabled" : ""} ${className}`}
       disabled={disabled}
       {...restProps}
     >
