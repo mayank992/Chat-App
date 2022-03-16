@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { ChannelListItem } from './ChannelListItem';
 import { Collapsible } from '../../../library/collapsible/Collapsible';
 import { List } from '../../../library/list/index';

@@ -8,6 +8,9 @@ const router = new express.Router();
 router.post('/login', (req, res) => {
   const { username, name } = req.body;
 
+  if (!username) return res.status(400).send({ message: 'username is required' });
+  if (!name) return res.status(400).send({ message: 'name is required' });
+
   try {
     const user = User.findByUsername(username);
 

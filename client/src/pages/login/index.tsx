@@ -55,15 +55,33 @@ export function Login() {
       <form className="login__form" onSubmit={submitHandler}>
         <label>
           Username
-          <input className="login__input" name="username" value={formState.username} onChange={changeHandler} />
+          <input
+            className="login__input"
+            name="username"
+            value={formState.username}
+            onChange={changeHandler}
+            required
+          />
         </label>
         <label>
           First name
-          <input className="login__input" name="firstname" value={formState.firstname} onChange={changeHandler} />
+          <input
+            className="login__input"
+            name="firstname"
+            value={formState.firstname}
+            onChange={changeHandler}
+            required
+          />
         </label>
         <label>
           Last name
-          <input className="login__input" name="lastname" value={formState.lastname} onChange={changeHandler} />
+          <input
+            className="login__input"
+            name="lastname"
+            value={formState.lastname}
+            onChange={changeHandler}
+            required
+          />
         </label>
         <ButtonWithSpinner className="submit-btn" isLoading={isLoading} disabled={isLoading} type="submit">
           Login
