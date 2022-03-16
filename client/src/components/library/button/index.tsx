@@ -17,7 +17,7 @@ export function ButtonWithSpinner({
   ...restProps
 }: ButtonWithSpinnerProps) {
   return (
-    <button className={`btn ${disabled && 'btn--disabled'} ${className}`} disabled={disabled} {...restProps}>
+    <button className={`btn ${disabled ? 'btn--disabled' : ''} ${className}`} disabled={disabled} {...restProps}>
       {children}
       {isLoading && <Spinner />}
     </button>
