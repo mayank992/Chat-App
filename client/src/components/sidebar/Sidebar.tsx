@@ -1,14 +1,13 @@
+import React, { useCallback } from 'react';
 import { useUserContext } from '../../contexts/UserContext';
 import { CreateChannelModal } from './components/createChannelModal/CreateChannelModal';
 import { AddUserDmModal } from './components/addUserDmModal/AddUserDmModal';
 import { useGetUserDetails } from '../../hooks/useGetUserDetails';
+import { ChannelList } from './components/channelList/index';
 import { useModal } from '../../hooks/useModal';
 
-import { ChannelList } from './components/channelList/index';
-
-import './Sidebar.css';
 import { ChannelType } from '../../types';
-import React, { useCallback } from 'react';
+import './Sidebar.css';
 
 export const Sidebar = ({
   selectedChannel,

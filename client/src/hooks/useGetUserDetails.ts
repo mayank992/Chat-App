@@ -1,7 +1,7 @@
 import { useQuery } from './useQuery';
 import { client } from '../utils/apiClient';
 import { useUserContext } from '../contexts/UserContext';
-import { UserDetailsType } from '../types';
+import { UserDetailsType } from '../types/index';
 
 export function useGetUserDetails() {
   const [user] = useUserContext();
