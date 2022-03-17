@@ -118,3 +118,10 @@
   background-color: white;
   border-radius: 10px;
 }
+
+.chat-area__actions {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+  height: 100%;
+}

@@ -25,7 +25,7 @@ export const ChannelGroupActions = ({ channelId }: { channelId: string }) => {
   );
 
   return (
-    <div>
+    <div className="chat-area__actions">
       <span className="chat__members" onClick={openChannelMembersModal}>
         <img className="chat-members__icon" src={userIcon} alt="user-img" />
       </span>

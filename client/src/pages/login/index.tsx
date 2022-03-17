@@ -1,8 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { UserType } from '../../types';
-import { client } from '../../utils/apiClient';
+import { useLogin } from '../../utils/auth';
 import { UserContext } from '../../contexts/UserContext';
-import { useMutation } from '../../hooks/useMutation';
 import { ErrorMessage } from '../../components/library/Messages';
 import { ButtonWithSpinner } from '../../components/library/button';
 import './Login.css';
@@ -22,19 +20,7 @@ const initialFormState = {
 export function Login() {
   const [, setUser] = useContext(UserContext);
   const [formState, setFormState] = useState<FormState>(initialFormState);
-
-  // TODO - create seperate hook for this login mutation
-  const { isError, error, mutate, isLoading } = useMutation<UserType, { message: string }, FormState>(
-    ({ username, firstname, lastname }: FormState) =>
-      client('/users/login', null, {
-        method: 'POST',
-        data: {
-          username,
-          name: `${firstname} ${lastname}`,
-        },
-      }),
-    { onSuccess: setUser }
-  );
+  const { isError, isLoading, error, mutate } = useLogin({ onSuccess: setUser });
 
   async function submitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
